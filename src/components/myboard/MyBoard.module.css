@@ -74,11 +74,13 @@
 }
 
 .filterBtn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--f-color, var(--color-primary));
+  color: var(--f-color, var(--color-primary));
+  background: var(--f-bg, var(--color-primary-light));
 }
 
 .filterBtn.active {
+  /* Overridden by inline styles — kept as fallback */
   background: var(--color-primary-light);
   border-color: var(--color-primary);
   color: var(--color-primary);
@@ -543,4 +545,5 @@
   .header {
     margin-bottom: 16px;
   }
+
 }

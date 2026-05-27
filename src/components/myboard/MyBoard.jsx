@@ -13,11 +13,12 @@ const priorityMeta = {
 };
 
 const STATUS_FILTERS = [
-  { key: 'PROGRESS', label: 'On Progress' },
-  { key: 'BACKLOG',  label: 'Backlog' },
-  { key: 'DONE',     label: 'Done' },
-  { key: 'ALL',      label: 'All' },
+  { key: 'PROGRESS', label: 'On Progress', color: '#2563eb', bg: '#eff6ff', border: '#93c5fd', colorMuted: '#60a5fa' },
+  { key: 'BACKLOG',  label: 'Backlog',     color: '#b45309', bg: '#fffbeb', border: '#fcd34d', colorMuted: '#f59e0b' },
+  { key: 'DONE',     label: 'Done',        color: '#15803d', bg: '#f0fdf4', border: '#86efac', colorMuted: '#22c55e' },
+  { key: 'ALL',      label: 'All',         color: '#6d28d9', bg: '#f5f3ff', border: '#c4b5fd', colorMuted: '#8b5cf6' },
 ];
+
 
 const MyBoard = ({ onTaskClick }) => {
   const { tasks, users, currentUser, projects, workflows, fetchAllTasks } = useData();
@@ -144,13 +145,25 @@ const MyBoard = ({ onTaskClick }) => {
         <div className={styles.controls}>
           {/* Status filter */}
           <div className={styles.filterGroup}>
-            {STATUS_FILTERS.map(f => (
-              <button
-                key={f.key}
-                className={`${styles.filterBtn} ${statusFilter === f.key ? styles.active : ''}`}
-                onClick={() => setStatusFilter(f.key)}
-              >{f.label}</button>
-            ))}
+            {STATUS_FILTERS.map(f => {
+              const isActive = statusFilter === f.key;
+              return (
+                <button
+                  key={f.key}
+                  className={`${styles.filterBtn} ${isActive ? styles.active : ''}`}
+                  style={{
+                    '--f-color':  f.color,
+                    '--f-bg':     f.bg,
+                    '--f-border': f.border,
+                    borderColor:  isActive ? f.color  : f.border,
+                    color:        isActive ? f.color  : f.colorMuted,
+                    background:   isActive ? f.bg     : 'transparent',
+                    fontWeight:   isActive ? '600'    : '400',
+                  }}
+                  onClick={() => setStatusFilter(f.key)}
+                >{f.label}</button>
+              );
+            })}
           </div>
 
           <div className={styles.filterDivider} />
