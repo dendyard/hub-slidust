@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useData } from '../../context/DataContext';
-import { CheckSquare, Square, Paperclip, MessageSquare, Calendar, ArrowUpDown, Clock, ChevronDown, Check } from 'lucide-react';
+import { CheckSquare, Square, Paperclip, MessageSquare, Calendar, ArrowUpDown, Clock, ChevronDown, Check, CheckCircle2 } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import styles from './MyBoard.module.css';
 
@@ -277,6 +277,7 @@ const MyBoard = ({ onTaskClick }) => {
               users={users}
               projects={projects}
               viewUserIds={effectiveUserIds}
+              stageType={stageTypeMap[task.status] || 'BACKLOG'}
               onClick={() => onTaskClick(task.id)}
             />
           ))}
@@ -286,7 +287,7 @@ const MyBoard = ({ onTaskClick }) => {
   );
 };
 
-const MyCard = ({ task, users, projects, viewUserIds, onClick }) => {
+const MyCard = ({ task, users, projects, viewUserIds, stageType, onClick }) => {
   const project  = projects.find(p => p.id === task.projectId);
   const assignee = users.find(u => u.id === task.assignee);
 
@@ -303,6 +304,11 @@ const MyCard = ({ task, users, projects, viewUserIds, onClick }) => {
     if (!task.due_date) return null;
     const d = new Date(task.due_date + 'T00:00:00');
     return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  })();
+
+  const completedDateLabel = (() => {
+    if (!task.completedAt) return null;
+    return new Date(task.completedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
   })();
 
   const dueDateState = (() => {
@@ -348,9 +354,14 @@ const MyCard = ({ task, users, projects, viewUserIds, onClick }) => {
           {task.commentCount > 0 && (
             <span className={styles.metric}><MessageSquare size={12} />{task.commentCount}</span>
           )}
-          {dueDateLabel && (
+          {dueDateLabel && stageType !== 'DONE' && (
             <span className={`${styles.metric} ${dueDateState === 'overdue' ? styles.metricOverdue : ''}`}>
               <Calendar size={12} />{dueDateLabel}
+            </span>
+          )}
+          {completedDateLabel && (
+            <span className={`${styles.metric} ${styles.metricCompleted}`}>
+              <CheckCircle2 size={12} />{completedDateLabel}
             </span>
           )}
         </div>
