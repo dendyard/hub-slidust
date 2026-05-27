@@ -1310,11 +1310,13 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
       )}
 
       {showHistory && (
-        <TaskHistoryModal
-          taskId={actualTaskId}
-          taskTitle={formData.title}
-          onClose={() => setShowHistory(false)}
-        />
+        <div onClick={e => e.stopPropagation()}>
+          <TaskHistoryModal
+            taskId={actualTaskId}
+            taskTitle={formData.title}
+            onClose={() => setShowHistory(false)}
+          />
+        </div>
       )}
 
       {confirmDeleteSubId && (
