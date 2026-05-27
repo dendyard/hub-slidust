@@ -325,7 +325,7 @@
 
 .leftPane {
   flex: 6;
-  padding: 28px 24px 24px;
+  padding: 14px 24px 24px;
   overflow-y: auto;
   z-index: 2;
   position: relative;
