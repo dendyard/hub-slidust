@@ -220,9 +220,9 @@
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: 0;
   transform: translateX(-50%);
-  background: var(--border-color, #e5e7eb);
+  border-left: 2px dashed #6b7280;
   z-index: 0;
 }
 
@@ -323,7 +323,7 @@
 /* ── Event card ── */
 .card {
   background: var(--bg-body, #fafafa);
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: none;
   border-radius: 10px;
   padding: 9px 11px;
   width: 100%;
