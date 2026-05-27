@@ -1,0 +1,422 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Filter bar ── */
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  padding: 7px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus {
+  border-color: var(--color-primary);
+}
+
+.filterSelect {
+  padding: 7px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.filterSelect:focus {
+  border-color: var(--color-primary);
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.clearBtn:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.exportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-primary, #3b82f6);
+  color: #fff;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.exportBtn:hover:not(:disabled) {
+  background: #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.exportBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.countBadge {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--bg-board);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 3px 12px;
+  white-space: nowrap;
+}
+
+/* ── Table ── */
+.tableWrap {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-surface);
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.th:hover {
+  color: var(--text-main);
+}
+
+.sortIcon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+  opacity: 0.4;
+}
+
+.sortActive {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.row {
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.1s;
+}
+
+.row:hover {
+  background: var(--bg-surface-hover);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.td {
+  padding: 10px 16px;
+  vertical-align: middle;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.tdTitle {
+  padding: 10px 16px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.stageDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.titleText {
+  font-weight: 500;
+  color: var(--text-main);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 360px;
+}
+
+.subtaskBadge {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--bg-board);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 1px 7px;
+  flex-shrink: 0;
+}
+
+.stagePill,
+.priorityPill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.assigneeCell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.dateCell {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.overdue {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ── Date filter button ── */
+.dateFilterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.dateFilterBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.dateFilterBtnActive {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  color: var(--color-primary);
+}
+
+.dateFilterBtnSet {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+.dateDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Date range panel ── */
+.datePanel {
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  flex-shrink: 0;
+  animation: slidePanelIn 0.18s ease;
+}
+
+@keyframes slidePanelIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.datePanelInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  flex-wrap: wrap;
+}
+
+.datePanelLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.datePanelSelect {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.datePanelSelect:focus {
+  border-color: var(--color-primary);
+}
+
+.datePanelInput {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.datePanelInput:focus {
+  border-color: var(--color-primary);
+}
+
+.datePanelInput::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.dateClearBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dateClearBtn:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+@media (max-width: 768px) {
+  .filterBar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .searchInput {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filterSelect {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .countBadge {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .td,
+  .tdTitle {
+    padding: 8px 12px;
+  }
+
+  .titleText {
+    max-width: 180px;
+  }
+
+  .datePanelInner {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .datePanelInput,
+  .datePanelSelect {
+    flex: 1;
+    min-width: 120px;
+  }
+}

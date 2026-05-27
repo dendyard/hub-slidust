@@ -1,0 +1,546 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  gap: 4px;
+}
+
+.filterDivider {
+  width: 1px;
+  height: 22px;
+  background: var(--border-color);
+  align-self: center;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filterBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filterBtn.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.avatarMultiRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.avatarToggle {
+  background: none;
+  border: 2px solid transparent;
+  padding: 1px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.avatarToggleActive {
+  border-color: var(--color-primary);
+}
+
+.avatarToggleInactive {
+  opacity: 0.35;
+}
+
+.avatarPickerWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatarPickerBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarAll {
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarPickerEmpty {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--text-muted);
+  background: var(--bg-surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assigneeDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 200px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.assigneeSearch {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-size: 0.78rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.assigneeItem {
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+  transition: background 0.1s;
+}
+
+.assigneeItem:hover {
+  background: var(--bg-surface-hover);
+}
+
+.assigneeItemActive {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  overflow-y: auto;
+  padding-bottom: 24px;
+  align-content: start;
+}
+
+/* ── Card ─────────────────────────────────────── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--card-border-color);
+  border-radius: 0;
+  padding: 12px 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
+}
+
+
+.cardMeta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.projectTag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #000;
+}
+
+
+
+.cardTitle {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* My subtasks list */
+.mySubtasks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--bg-body);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.subtaskRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.subtaskRow svg {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.subtaskDone {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.subtaskDone svg {
+  color: var(--color-success);
+}
+
+/* Footer */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.metrics {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #000;
+  font-weight: 500;
+}
+
+.metricDone {
+  color: var(--color-success);
+}
+
+.metricOverdue {
+  color: var(--color-danger);
+}
+
+.cardRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.subtaskOnlyTag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* ── Assignee filter picker ───────────────────── */
+.filterPickerWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.filterPickerBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 32px;
+}
+
+.filterPickerBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filterPickerBtnOpen {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filterPickerBtnActive {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.filterAllLabel {
+  font-size: 0.8rem;
+  color: inherit;
+}
+
+.filterAvatarStack {
+  display: flex;
+  align-items: center;
+}
+
+.filterMoreBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+  transition: transform 0.15s;
+}
+
+/* ── Filter popup ─────────────────────────────── */
+.filterPopup {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  z-index: 200;
+  min-width: 220px;
+  overflow: hidden;
+}
+
+.filterPopupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filterPopupTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.filterPopupActions {
+  display: flex;
+  gap: 4px;
+}
+
+.filterPopupActionBtn {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.filterPopupActionBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ── Search box ──────────────────────────────── */
+.filterSearchWrap {
+  padding: 8px 10px 4px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filterSearchInput {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.filterSearchInput:focus {
+  border-color: var(--color-primary);
+}
+
+.filterSearchInput::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── User list inside popup ───────────────────── */
+.filterUserList {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.filterUserRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.filterUserRow:hover {
+  background: var(--bg-surface-hover);
+}
+
+.filterUserRowActive {
+  background: var(--color-primary-light);
+}
+
+.filterUserName {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterUserToggle {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border-color);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.filterUserToggleOn {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    margin-bottom: 16px;
+  }
+}

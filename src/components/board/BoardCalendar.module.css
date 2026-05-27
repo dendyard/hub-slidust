@@ -1,0 +1,228 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 24px 24px;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.calHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.calNav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.calTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  min-width: 160px;
+  text-align: center;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.navBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.todayBtn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.todayBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+/* ── Day labels ── */
+.dayLabels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2px;
+}
+
+.dayLabel {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(100px, 1fr);
+  flex: 1;
+  overflow-y: auto;
+  border-left: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+}
+
+.cell {
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 6px 6px 4px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.cellOtherMonth {
+  background: var(--bg-board);
+  opacity: 0.5;
+}
+
+.cellToday {
+  background: var(--color-primary-light);
+}
+
+/* ── Day number ── */
+.dayNum {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  line-height: 1;
+  margin-bottom: 2px;
+  width: 22px;
+  text-align: center;
+}
+
+.dayNumToday {
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* ── Task chips ── */
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.taskChip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--bg-surface);
+  border: none;
+  border-left: 3px solid var(--border-color);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+  overflow: hidden;
+}
+
+.taskChip:hover {
+  background: var(--bg-surface-hover);
+}
+
+.taskChipPriority {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.taskChipTitle {
+  font-size: 0.72rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px 12px 16px;
+  }
+
+  .calTitle {
+    font-size: 0.9rem;
+    min-width: 120px;
+  }
+
+  /* Scroll calendar horizontally so 7 columns stay intact */
+  .dayLabels,
+  .grid {
+    min-width: 560px;
+  }
+
+  .dayLabels {
+    font-size: 0.68rem;
+  }
+
+  .grid {
+    grid-auto-rows: minmax(72px, 1fr);
+    overflow-x: auto;
+  }
+
+  /* Wrap calendar in scrollable container */
+  .calBody {
+    overflow-x: auto;
+    flex: 1;
+  }
+
+  .cell {
+    padding: 4px 4px 3px;
+    min-height: 72px;
+  }
+
+  .taskChipPriority {
+    display: none;
+  }
+
+  .taskChipTitle {
+    font-size: 0.68rem;
+  }
+}

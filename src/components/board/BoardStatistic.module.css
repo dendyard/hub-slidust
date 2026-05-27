@@ -1,0 +1,424 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 32px;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Filter bar ── */
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterWrap {
+  position: relative;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filterBtnActive {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.filterBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+.filterMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 200px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  padding: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.filterOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.filterOption:hover {
+  background: var(--bg-surface-hover);
+}
+
+.filterOptionActive {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.clearFilter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clearFilter:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+/* ── Summary cards ── */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.summaryCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cardCount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.cardLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
+
+/* ── Chart card ── */
+.chartCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+}
+
+.chartHeader {
+  margin-bottom: 16px;
+}
+
+.chartTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.chartSub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* ── Tooltip ── */
+.tooltip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.82rem;
+}
+
+.tooltipTitle {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+/* ── Table card ── */
+.tableCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+}
+
+.table {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tableHead {
+  display: grid;
+  grid-template-columns: 1fr 120px 180px;
+  padding: 6px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 4px;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 120px 180px;
+  align-items: center;
+  padding: 9px 8px;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-main);
+  transition: background var(--transition-fast);
+}
+
+.tableRow:hover {
+  background: var(--bg-surface-hover);
+}
+
+.stageCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stageDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.countCell {
+  font-weight: 600;
+  padding-left: 4px;
+}
+
+.pctCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.barWrap {
+  flex: 1;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* ── Empty state ── */
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ── Team Workload ── */
+.workloadList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.workloadRow {
+  display: grid;
+  grid-template-columns: 200px 1fr 140px;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 8px;
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast);
+}
+
+.workloadRow:hover {
+  background: var(--bg-surface-hover);
+}
+
+.workloadMember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.workloadName {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.workloadDisplayName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.workloadSub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.workloadBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.workloadBarWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workloadBarTrack {
+  flex: 1;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.workloadBarFill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.workloadTotal {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  min-width: 20px;
+  text-align: right;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tableHead,
+  .tableRow {
+    grid-template-columns: 1fr 60px 100px;
+    font-size: 0.78rem;
+  }
+
+  .barWrap {
+    display: none;
+  }
+
+  .pctCell {
+    justify-content: flex-end;
+  }
+
+  .workloadRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .workloadBarWrap {
+    display: none;
+  }
+}

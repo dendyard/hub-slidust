@@ -1,0 +1,284 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Collapsed state */
+.sidebar.collapsed {
+  width: 60px;
+}
+
+/* Collapse toggle button */
+.collapseBtn {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.collapseBtn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+/* In collapsed mode, center the button */
+.sidebar.collapsed .collapseBtn {
+  right: 50%;
+  transform: translateX(50%);
+  top: 20px;
+}
+
+/* Mobile: hide sidebar off-screen by default */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+    width: 260px !important; /* always full width on mobile */
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-float);
+  }
+  .collapseBtn {
+    display: none;
+  }
+}
+
+.overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 199;
+    animation: fadeIn 0.2s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  margin-bottom: 32px;
+  min-height: 32px;
+}
+
+/* In collapsed mode, give space for the collapse button */
+.sidebar.collapsed .logo {
+  padding: 0;
+  margin-bottom: 52px;
+}
+
+.logoImg {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.navSection {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  padding: 0 24px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.nav ul li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Collapsed: center icons */
+.sidebar.collapsed .nav ul li {
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.sidebar.collapsed .nav ul.projectList li {
+  padding: 8px 0;
+  justify-content: center;
+}
+
+.nav ul li:hover {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+}
+
+.nav ul li.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-right: 3px solid var(--color-primary);
+}
+
+.projectInitial {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background-color: var(--color-primary);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.projectIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.nav ul.projectList li {
+  padding: 8px 24px;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.nav ul.projectList li.activeProject {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.projectName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deleteProjectBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.nav ul.projectList li:hover .deleteProjectBtn {
+  opacity: 1;
+}
+
+.deleteProjectBtn:hover {
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+.plainMenu {
+  margin-bottom: 8px;
+}
+
+.addProjectBtn {
+  margin: 12px 24px;
+  padding: 8px 12px;
+  color: var(--color-primary);
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.addProjectBtn:hover {
+  background-color: var(--color-primary-light);
+}
+
+.addProjectBtnIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: 8px auto;
+  border-radius: 8px;
+  color: var(--color-primary);
+  background: transparent;
+  border: 1px dashed var(--color-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.addProjectBtnIcon:hover {
+  background-color: var(--color-primary-light);
+}
+
+.footer {
+  padding: 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.footer:hover {
+  color: var(--color-danger);
+}

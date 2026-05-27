@@ -1,0 +1,156 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+}
+
+.modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--border-radius-lg);
+  width: 460px;
+  max-width: 95vw;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(239, 68, 68, 0.2);
+}
+
+.iconWrapper {
+  background: var(--color-danger-bg);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.desc strong {
+  color: var(--text-main);
+}
+
+.confirmField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.confirmField label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.confirmField code {
+  background: var(--bg-surface-hover);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.confirmField input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  background: var(--bg-body);
+  color: var(--text-main);
+  font-family: monospace;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.confirmField input:focus {
+  border-color: var(--color-danger);
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cancelBtn:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-main);
+}
+
+.deleteBtn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-danger);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.deleteBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.deleteBtn:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.closeBtn:hover { color: var(--text-main); }

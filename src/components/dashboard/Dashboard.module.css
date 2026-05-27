@@ -1,0 +1,792 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Open Task header card (same design as UserPerformance headerCard) ── */
+.headerCard {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #5D1C6A 0%, #021A54 100%);
+  border-radius: 16px;
+  padding: 20px 28px;
+  color: #fff;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.headerStats {
+  display: flex;
+  flex: 1;
+  gap: 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerContrib {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  justify-content: center;
+}
+
+.headerContrib + .headerContrib {
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.bigNum {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.headerLine {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  opacity: 0.95;
+}
+
+@media (max-width: 600px) {
+  .headerCard { padding: 16px 18px; }
+  .bigNum { font-size: 2.8rem; }
+  .headerStats { flex-wrap: wrap; }
+}
+
+/* ── Unified filter bar label ── */
+.filterBarLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* ── Unified filter bar ── */
+.unifiedFilterBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.filterDivider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+.filterGroupLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.pageTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* ── Advanced Filter ── */
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterDropdown {
+  position: relative;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filterBtnActive {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.filterBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+.filterMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  padding: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.filterOption {
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterOption:hover {
+  background: var(--bg-surface-hover);
+}
+
+.filterOptionActive {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.clearFilter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clearFilter:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+/* Summary Cards */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .summaryGrid {
+    gap: 10px;
+  }
+
+  .summaryCard {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .cardIcon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .summaryCard {
+    padding: 12px;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+.summaryCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cardIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.cardLabel {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Section */
+.perfGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Project Table */
+.projectTable {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .tableHeader,
+  .tableRow {
+    min-width: 480px;
+  }
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--bg-surface-hover);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  gap: 16px;
+}
+
+.tableRow {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-color);
+  gap: 16px;
+  transition: background 0.15s;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.tableRow:hover {
+  background: var(--bg-surface-hover);
+}
+
+.colName {
+  width: 180px;
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colStages {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.colTotal {
+  width: 56px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stageBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-body);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 3px 10px 3px 7px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stageBadge strong {
+  color: var(--text-main);
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.stageDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ── 2-column grid ── */
+.twoColGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.twoColGrid > * {
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .twoColGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Task Table ── */
+.taskTableHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.taskTable {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.taskTableBody {
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.taskTableBodySm {
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.taskTableHead {
+  display: flex;
+  align-items: center;
+  padding: 9px 16px;
+  background: var(--bg-surface-hover);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  gap: 12px;
+  min-width: 680px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* compact 3-col variant */
+.taskTableHeadSm {
+  display: flex;
+  align-items: center;
+  padding: 9px 14px;
+  background: var(--bg-surface-hover);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.taskTableRow {
+  display: flex;
+  align-items: center;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border-color);
+  gap: 12px;
+  font-size: 0.84rem;
+  color: var(--text-main);
+  min-width: 680px;
+  transition: background 0.12s;
+}
+
+.taskTableRowSm {
+  display: flex;
+  align-items: center;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+  font-size: 0.84rem;
+  color: var(--text-main);
+  transition: background 0.12s;
+  min-width: 0;
+  width: 100%;
+}
+
+/* In compact rows: title fixed, others fixed too */
+.taskTableRowSm .tcTitle,
+.taskTableHeadSm .tcTitle {
+  flex: 0 0 auto;
+  width: 45%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskTableRowSm .tcStatus,
+.taskTableHeadSm .tcStatus {
+  flex: 0 0 auto;
+  width: 90px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskTableRowSm .tcDoneBy,
+.taskTableHeadSm .tcDoneBy {
+  flex: 1 1 0;
+  min-width: 80px;
+  overflow: hidden;
+}
+
+.taskTableRowSm .tcUpdated,
+.taskTableHeadSm .tcUpdated {
+  flex: 0 0 auto;
+  width: 80px;
+  min-width: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.taskTableRowSm:last-child {
+  border-bottom: none;
+}
+
+.taskTableRow:last-child {
+  border-bottom: none;
+}
+
+.taskTableRowClickable {
+  cursor: pointer;
+}
+
+.taskTableRowClickable:hover {
+  background: var(--bg-surface-hover);
+}
+
+.taskTableEmpty {
+  padding: 20px 16px;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.tcNum {
+  width: 28px;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.tcTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.tcProject {
+  width: 130px;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.tcAssignee {
+  width: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.tcDoneBy {
+  width: 150px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.doneByWrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.doneByName {
+  font-size: 0.8rem;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tcStatus {
+  width: 110px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tcUpdated {
+  width: 110px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.unassigned {
+  color: var(--text-muted);
+}
+
+/* Chart */
+.chartCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px 16px 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionDesc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ── Tasks Done header ── */
+.doneTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.doneBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 20px;
+  background: #22c55e22;
+  color: #22c55e;
+  border: 1px solid #22c55e44;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dateInput {
+  padding: 5px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.dateInput:focus,
+.dateInput:hover {
+  border-color: var(--color-primary);
+}
+
+.dateRangeSep {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.thisWeekBtn {
+  padding: 5px 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.thisWeekBtn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.rangeLabel {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Tooltip */
+.tooltip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.82rem;
+}
+
+.tooltipTitle {
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}

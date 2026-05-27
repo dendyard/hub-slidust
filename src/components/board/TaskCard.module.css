@@ -1,0 +1,183 @@
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-sm);
+  padding: 10px 14px;
+  cursor: grab;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(0.95);
+  box-shadow: var(--shadow-lg);
+}
+
+@keyframes glowPulse {
+  0%   {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.8), 0 8px 24px rgba(34, 197, 94, 0.45);
+    transform: translateY(-6px) scale(1.025);
+    border-color: rgba(34, 197, 94, 0.9);
+  }
+  35%  {
+    box-shadow: 0 0 0 7px rgba(34, 197, 94, 0.28), 0 4px 16px rgba(34, 197, 94, 0.3);
+    transform: translateY(1px) scale(1);
+    border-color: rgba(34, 197, 94, 0.8);
+  }
+  70%  {
+    box-shadow: 0 0 0 12px rgba(34, 197, 94, 0.08), 0 2px 8px rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    transform: translateY(0) scale(1);
+    border-color: var(--card-border-color);
+  }
+}
+
+.card.glow {
+  animation: glowPulse 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card.priorityHigh {
+  background-color: #ff70bf;
+  border-color: #ff50b0;
+}
+
+.priorityHigh .metric,
+.priorityHigh .dueDateText {
+  color: #000 !important;
+}
+
+.card.dragging {
+  opacity: 0.4;
+  transform: scale(0.96);
+  box-shadow: none;
+  border-style: dashed;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary-light);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    cursor: pointer;
+  }
+
+  .card:active {
+    transform: scale(0.98);
+  }
+
+  .title {
+    font-size: 0.88rem;
+  }
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.priority {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.priority.high {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.priority.medium {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.priority.low {
+  background-color: #f1f5f9;
+  color: #94a3b8;
+}
+
+.dueDate {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 12px;
+  background-color: var(--bg-board);
+  color: var(--text-muted);
+}
+
+.dueDate.overdue {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.dueDateText {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  border: 1px solid;
+  padding: 0 5px;
+}
+
+.dueDateText.overdue {
+  color: var(--color-danger);
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.metrics {
+  display: flex;
+  gap: 12px;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.metric.done {
+  color: var(--color-success);
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+}
+
