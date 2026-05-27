@@ -63,7 +63,7 @@ const TaskCard = ({ task, onClick, isGlowing }) => {
     return diff < 2 ? 'overdue' : 'normal';
   })();
 
-  const isHigh = task.priority.toLowerCase() === 'high';
+  const isHigh = (task.priority ?? '').toLowerCase() === 'high';
 
   return (
     <>
