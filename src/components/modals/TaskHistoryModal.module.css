@@ -218,7 +218,7 @@
 .verticalLine {
   position: absolute;
   left: 50%;
-  top: 60px;
+  top: 100px;
   bottom: 0;
   width: 0;
   transform: translateX(-50%);
@@ -430,7 +430,7 @@
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-main, #111);
-  padding: 16px 16px 0;
+  padding: 6px 16px 0;
 }
 .exportSub {
   text-align: center;
