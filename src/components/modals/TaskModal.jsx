@@ -1312,8 +1312,9 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
       {showHistory && (
         <div onClick={e => e.stopPropagation()}>
           <TaskHistoryModal
-            taskId={actualTaskId}
-            taskTitle={formData.title}
+            task={existingTask}
+            comments={comments}
+            users={users}
             onClose={() => setShowHistory(false)}
           />
         </div>

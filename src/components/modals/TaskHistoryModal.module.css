@@ -2,7 +2,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.38);
   z-index: 9999;
   display: flex;
   align-items: flex-start;
@@ -14,13 +14,13 @@
 
 /* ── Panel ── */
 .panel {
-  width: 400px;
+  width: 460px;
   max-width: 100vw;
   height: 100vh;
   background: var(--bg-surface, #fff);
   display: flex;
   flex-direction: column;
-  box-shadow: -6px 0 28px rgba(0,0,0,0.10);
+  box-shadow: -6px 0 32px rgba(0,0,0,0.10);
   animation: slideIn 0.22s cubic-bezier(0.34, 1.1, 0.64, 1);
   overflow: hidden;
 }
@@ -64,7 +64,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 280px;
+  max-width: 310px;
 }
 .closeBtn {
   background: var(--bg-hover, #f3f4f6);
@@ -93,7 +93,7 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  padding: 2px 7px;
+  padding: 2px 8px;
   border-radius: 20px;
   font-size: 0.7rem;
   font-weight: 700;
@@ -105,163 +105,14 @@
   font-weight: 500;
 }
 
-/* ── Body scroll ── */
+/* ── Body ── */
 .body {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 0 32px;
+  padding: 24px 0 40px;
 }
 
-/* ── Timeline container — relative so the vertical line can be absolute ── */
-.timeline {
-  position: relative;
-  padding: 0 18px;
-}
-
-/* Single continuous vertical line */
-.verticalLine {
-  position: absolute;
-  left: calc(18px + 11px); /* padding-left + half dot width */
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--border-color, #e5e7eb);
-  z-index: 0;
-}
-
-/* ── Date divider ── */
-.dateDivider {
-  display: flex;
-  align-items: center;
-  padding: 10px 0 10px 34px; /* align with card, skip dot column */
-  position: relative;
-  z-index: 1;
-}
-.datePill {
-  padding: 2px 10px;
-  background: var(--bg-hover, #f3f4f6);
-  border: 1px solid var(--border-color, #e5e7eb);
-  border-radius: 20px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--text-muted, #6b7280);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* ── Single event row ── */
-.event {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding-bottom: 10px;
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Dot column (22px wide, centered on the vertical line) ── */
-.dotWrap {
-  width: 22px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 10px;
-}
-.dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  z-index: 2;
-  position: relative;
-}
-
-/* ── Event card ── */
-.card {
-  flex: 1;
-  background: var(--bg-body, #fafafa);
-  border: 1px solid var(--border-color, #e5e7eb);
-  border-radius: 12px;
-  padding: 9px 12px;
-  transition: box-shadow 0.15s;
-}
-.card:hover {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-.cardRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-}
-
-.cardContent {
-  flex: 1;
-  min-width: 0;
-}
-
-.eventLabel {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 3px;
-}
-
-.eventDesc {
-  font-size: 0.82rem;
-  color: var(--text-main, #111);
-  line-height: 1.5;
-}
-
-.timeTag {
-  font-size: 0.68rem;
-  color: var(--text-muted, #9ca3af);
-  white-space: nowrap;
-  flex-shrink: 0;
-  padding-top: 2px;
-}
-
-/* ── Value pills ── */
-.pill {
-  display: inline-block;
-  padding: 1px 7px;
-  border-radius: 20px;
-  font-size: 0.73rem;
-  font-weight: 600;
-}
-
-/* ── Subtask name ── */
-.subtaskName {
-  font-style: italic;
-  color: var(--text-muted, #6b7280);
-}
-
-/* ── Comment snippet ── */
-.commentSnippet {
-  display: block;
-  margin-top: 5px;
-  padding: 5px 9px;
-  background: var(--bg-hover, #f3f4f6);
-  border-left: 3px solid var(--border-color, #e5e7eb);
-  border-radius: 0 6px 6px 0;
-  font-size: 0.78rem;
-  color: var(--text-muted, #6b7280);
-  font-style: italic;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 240px;
-}
-
-/* ── Empty state ── */
+/* ── Empty ── */
 .empty {
   display: flex;
   flex-direction: column;
@@ -274,71 +125,209 @@
 }
 .empty p { font-size: 0.85rem; margin: 0; }
 
-/* ── Skeleton ── */
-.skeletonWrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 0 18px;
+/* ───────────────────────────────────────────
+   ZIGZAG TIMELINE
+   Left col (side) | Center (dot+date) | Right col (side)
+   each 40% | 20% | 40%
+─────────────────────────────────────────── */
+.timeline {
   position: relative;
+  padding: 0 16px;
 }
-.skeletonWrap::before {
-  content: '';
+
+/* The single continuous vertical line */
+.verticalLine {
   position: absolute;
-  left: calc(18px + 11px);
-  top: 0; bottom: 0;
+  left: 50%;
+  top: 0;
+  bottom: 0;
   width: 2px;
+  transform: translateX(-50%);
   background: var(--border-color, #e5e7eb);
+  z-index: 0;
 }
-.skeletonRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+
+/* One event row */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+  margin-bottom: 20px;
   position: relative;
   z-index: 1;
 }
-.skeletonDot {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.3s infinite;
-  margin-top: 10px;
-}
-.skeletonCard {
-  flex: 1;
-  background: var(--bg-body, #fafafa);
-  border: 1px solid var(--border-color, #e5e7eb);
-  border-radius: 12px;
-  padding: 10px 12px;
-  display: flex;
-  gap: 9px;
-  align-items: flex-start;
-}
-.skeletonAvatar {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.3s infinite;
-}
-.skeletonLines {
-  flex: 1;
+
+/* ── Center column: date circle + dot ── */
+.center {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding-top: 3px;
+  align-items: center;
+  gap: 0;
+  z-index: 2;
 }
-.skeletonLine {
-  height: 11px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.3s infinite;
+
+.dateCircle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg-surface, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
 }
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+
+.dateCircleInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.dateDay {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.dateMon {
+  font-size: 0.55rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+/* Small connector dot (replaces the line dot) */
+.dotCenter {
+  display: none; /* hidden, the circle itself is the marker */
+}
+
+/* ── Side columns ── */
+.side {
+  display: flex;
+  align-items: center;
+}
+
+/* Right-side card: align left */
+.rowRight .side:last-child {
+  padding-left: 12px;
+}
+/* Left-side card: align right */
+.rowLeft .side:first-child {
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+/* ── Connector dashes from circle to card ── */
+.row::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1px;
+  width: 12px;
+  background: var(--border-color, #e5e7eb);
+  border-top: 1px dashed var(--border-color, #d1d5db);
+  z-index: 1;
+}
+.rowRight::before {
+  left: calc(50% + 28px);
+}
+.rowLeft::before {
+  right: calc(50% + 28px);
+}
+
+/* ── Event card ── */
+.card {
+  background: var(--bg-body, #fafafa);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  padding: 9px 11px;
+  width: 100%;
+  max-width: 160px;
+  transition: box-shadow 0.15s;
+}
+.card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.cardLabel {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+  opacity: 0.9;
+}
+
+.cardTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main, #111);
+  line-height: 1.3;
+  margin-bottom: 2px;
+  /* clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardDesc {
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-color, #f0f0f0);
+}
+
+.cardUser {
+  font-size: 0.68rem;
+  color: var(--text-muted, #6b7280);
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardTime {
+  font-size: 0.65rem;
+  color: var(--text-muted, #9ca3af);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── End cap ── */
+.endCap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 0;
+  position: relative;
+  z-index: 2;
+}
+.endDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-color, #d1d5db);
 }
