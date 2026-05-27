@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
-import { CheckSquare, Paperclip, MessageSquare, Calendar } from 'lucide-react';
+import { CheckSquare, Paperclip, MessageSquare, Calendar, CheckCircle2 } from 'lucide-react';
 import styles from './TaskCard.module.css';
 import UserAvatar from '../ui/UserAvatar';
 
 const TaskCard = ({ task, onClick, isGlowing }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const { users } = useData();
+  const { users, workflows } = useData();
+  const isDoneStage = workflows.some(w => w.id === task.status && w.type === 'DONE');
   const assignee = users.find(u => u.id === task.assignee);
 
   const handleDragStart = (e) => {
@@ -47,6 +48,11 @@ const TaskCard = ({ task, onClick, isGlowing }) => {
     if (!task.due_date) return null;
     const due = new Date(task.due_date + 'T00:00:00');
     return due.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  })();
+
+  const completedDateLabel = (() => {
+    if (!task.completedAt) return null;
+    return new Date(task.completedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
   })();
 
   const dueDateState = (() => {
@@ -92,10 +98,16 @@ const TaskCard = ({ task, onClick, isGlowing }) => {
               <span>{task.commentCount}</span>
             </div>
           )}
-          {dueDateLabel && (
+          {dueDateLabel && !isDoneStage && (
             <span className={`${styles.dueDateText} ${styles[dueDateState]}`}>
               <Calendar size={11} />
               {dueDateLabel}
+            </span>
+          )}
+          {completedDateLabel && (
+            <span className={styles.completedDateChip}>
+              <CheckCircle2 size={11} />
+              {completedDateLabel}
             </span>
           )}
         </div>

@@ -78,6 +78,41 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [showDirtyConfirm, setShowDirtyConfirm] = useState(false);
   const pendingCloseRef = useRef(false);
+
+  // Complete date manual edit
+  const [showCompletedConfirm, setShowCompletedConfirm] = useState(false);
+  const [pendingCompletedDate, setPendingCompletedDate] = useState('');
+  const skipDirtyOnceRef = useRef(false);
+
+  const handleCompletedDateChange = (newDate) => {
+    setPendingCompletedDate(newDate);
+    setShowCompletedConfirm(true);
+  };
+  const handleConfirmCompletedDate = async (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    if (!existingTask || !pendingCompletedDate) return;
+    const newCompletedAt = pendingCompletedDate + ' 00:00:00';
+    // Targeted API call updates completed_at only, without running the full task save.
+    const res = await authFetch(`${API_BASE}/tasks`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'patch_completed_at', id: existingTask.id, completedAt: newCompletedAt }),
+    });
+    if (res.ok) {
+      patchTask(existingTask.id, { completedAt: newCompletedAt });
+      skipDirtyOnceRef.current = true;
+      setFormData(prev => ({ ...prev, completedAt: newCompletedAt }));
+      setPendingCompletedDate('');
+      setShowCompletedConfirm(false);
+    }
+  };
+  const handleCancelCompletedDate = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    setPendingCompletedDate('');
+    setShowCompletedConfirm(false);
+  };
   
   const [comments, setComments] = useState([]);
   const [newCommentId, setNewCommentId] = useState(null);
@@ -139,6 +174,10 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
   useEffect(() => {
     if (isHydratingTaskRef.current) {
       isHydratingTaskRef.current = false;
+      return;
+    }
+    if (skipDirtyOnceRef.current) {
+      skipDirtyOnceRef.current = false;
       return;
     }
     if (isImmediateSavingRef.current) return; // skip — subtask status already saving immediately
@@ -428,14 +467,15 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
     }
   };
 
-  // Debounce auto-save
+  // Debounce auto-save — paused while the complete-date confirm bar is open
   useEffect(() => {
     if (!isDirty) return;
+    if (showCompletedConfirm) return;  // wait for user to confirm/cancel the date change
     const timer = setTimeout(() => {
       performAutoSave();
     }, 1500);
     return () => clearTimeout(timer);
-  }, [isDirty, formData, actualTaskId]);
+  }, [isDirty, formData, actualTaskId, showCompletedConfirm]);
 
   const handleClose = () => {
     if (isDirty) {
@@ -760,7 +800,28 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
                 disabled={readOnly}
               />
             </div>
+            {formData.completedAt && (
+              <div className={styles.formGroup}>
+                <label>Complete Date</label>
+                <input
+                  type="date"
+                  value={pendingCompletedDate || formData.completedAt.split(/[ T]/)[0]}
+                  onChange={e => handleCompletedDateChange(e.target.value)}
+                  className={styles.completedDateInput}
+                  disabled={readOnly}
+                />
+              </div>
+            )}
           </div>
+          {showCompletedConfirm && (
+            <div className={styles.completedConfirmBar}>
+              <span>Are you sure you want to change the completion date?</span>
+              <div className={styles.completedConfirmActions}>
+                <button type="button" className={styles.completedConfirmYes} onClick={handleConfirmCompletedDate}>Yes, change it</button>
+                <button type="button" className={styles.completedConfirmNo} onClick={handleCancelCompletedDate}>Cancel</button>
+              </div>
+            </div>
+          )}
 
           <div className={styles.formGroup}>
             <label>Subtasks</label>

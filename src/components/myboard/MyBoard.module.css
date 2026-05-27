@@ -328,6 +328,10 @@
   color: var(--color-danger);
 }
 
+.metricCompleted {
+  color: var(--color-success);
+}
+
 .cardRight {
   display: flex;
   align-items: center;
