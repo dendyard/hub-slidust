@@ -1,12 +1,13 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useData, API_BASE, resolveUploadUrl, authFetch } from '../../context/DataContext';
-import { X, Plus, Trash2, MessageSquare, Send, MoreHorizontal, UploadCloud, Paperclip, ChevronDown, ChevronUp, UserPlus, FolderOpen, ExternalLink } from 'lucide-react';
+import { X, Plus, Trash2, MessageSquare, Send, MoreHorizontal, UploadCloud, Paperclip, ChevronDown, ChevronUp, UserPlus, FolderOpen, ExternalLink, History } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import MentionTextarea, { nameToHandle, extractMentionHandles } from '../ui/MentionTextarea';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import styles from './Modal.module.css';
 import DeleteTaskModal from './DeleteTaskModal';
+import TaskHistoryModal from './TaskHistoryModal';
 import { linkifyHtml } from '../../utils/linkify';
 import noActivityImg from '../../assets/noactivity.png';
 
@@ -131,6 +132,7 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
   const [previewAttachment, setPreviewAttachment] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [confirmDeleteSubId, setConfirmDeleteSubId] = useState(null);
   const [descEditing, setDescEditing] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
@@ -1136,11 +1138,22 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
                className={styles.commentsHeader}
                onClick={() => setCommentsOpen(v => !v)}
              >
-               <span>
-                 <MessageSquare size={16} style={{display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom'}} />
+               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                 <MessageSquare size={16} style={{display: 'inline', verticalAlign: 'text-bottom'}} />
                  Activity & Comments
                  {comments.length > 0 && (
                    <span className={styles.commentCount}>{comments.length}</span>
+                 )}
+                 {actualTaskId && (
+                   <button
+                     type="button"
+                     className={styles.seeHistoryBtn}
+                     onClick={e => { e.stopPropagation(); setShowHistory(true); }}
+                     title="See History"
+                   >
+                     <History size={12} />
+                     See History
+                   </button>
                  )}
                </span>
                <span className={styles.commentsToggleIcon}>
@@ -1293,6 +1306,14 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
           taskTitle={formData.title}
           onConfirm={async () => { await deleteTask(taskId); onClose(); }}
           onClose={() => setShowDeleteModal(false)}
+        />
+      )}
+
+      {showHistory && (
+        <TaskHistoryModal
+          taskId={actualTaskId}
+          taskTitle={formData.title}
+          onClose={() => setShowHistory(false)}
         />
       )}
 

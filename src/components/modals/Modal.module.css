@@ -1214,6 +1214,27 @@ input:disabled + .slider {
   cursor: default;
 }
 
+.seeHistoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-body);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.seeHistoryBtn:hover {
+  background: #1c1c1e;
+  color: #fff;
+  border-color: #1c1c1e;
+}
+
 .commentCount {
   display: inline-flex;
   align-items: center;
