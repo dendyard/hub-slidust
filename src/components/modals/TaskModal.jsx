@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useData, API_BASE, resolveUploadUrl, authFetch } from '../../context/DataContext';
 import { X, Plus, Trash2, MessageSquare, Send, MoreHorizontal, UploadCloud, Paperclip, ChevronDown, ChevronUp, UserPlus, FolderOpen, ExternalLink } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
@@ -133,6 +133,9 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [confirmDeleteSubId, setConfirmDeleteSubId] = useState(null);
   const [descEditing, setDescEditing] = useState(false);
+  const [descExpanded, setDescExpanded] = useState(false);
+  const [descOverflows, setDescOverflows] = useState(false);
+  const descContentRef = useRef(null);
   const isHydratingTaskRef    = useRef(false);
   const isImmediateSavingRef  = useRef(false);
   const isDirtyRef            = useRef(false);
@@ -154,6 +157,26 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
       setTimeout(() => quillRef.current?.getEditor()?.focus(), 0);
     }
   }, [descEditing]);
+
+  // Detect if description needs collapse (> 500 words or rendered height > 500px)
+  // useLayoutEffect fires before browser paint → no flash of full content before collapsing
+  useLayoutEffect(() => {
+    if (descEditing) return;
+    const text = (formData.description || '').replace(/<[^>]*>/g, '').trim();
+    const wordCount = text.split(/\s+/).filter(Boolean).length;
+    if (wordCount > 500) { setDescOverflows(true); return; }
+    if (descContentRef.current) {
+      setDescOverflows(descContentRef.current.scrollHeight > 500);
+    } else {
+      setDescOverflows(false);
+    }
+  }, [formData.description, descEditing]);
+
+  // Reset expanded state when opening a different task
+  // (descOverflows is intentionally NOT reset here — useLayoutEffect re-checks it when formData.description changes)
+  useEffect(() => {
+    setDescExpanded(false);
+  }, [existingTask?.id]);
 
   // Close on Escape
   useEffect(() => {
@@ -622,21 +645,44 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
                 onBlur={() => setDescEditing(false)}
               />
             ) : (
-              <div
-                className={styles.descPreview}
-                onClick={() => !readOnly && setDescEditing(true)}
-              >
-                {!isDescriptionEmpty(formData.description) ? (
-                  <div
-                    className={`ql-snow ${styles.descContent}`}
-                    dangerouslySetInnerHTML={{ __html: linkifyHtml(formData.description.replace(/&nbsp;/g, ' ')) }}
-                  />
-                ) : (
-                  <span className={styles.descPlaceholder}>
-                    {readOnly ? 'No description.' : 'Add description...'}
-                  </span>
+              <>
+                <div
+                  className={`${styles.descPreview} ${descOverflows && !descExpanded ? styles.descPreviewCollapsed : ''}`}
+                  onClick={() => !readOnly && setDescEditing(true)}
+                >
+                  {!isDescriptionEmpty(formData.description) ? (
+                    <>
+                      <div
+                        ref={descContentRef}
+                        className={`ql-snow ${styles.descContent}`}
+                        dangerouslySetInnerHTML={{ __html: linkifyHtml(formData.description.replace(/&nbsp;/g, ' ')) }}
+                      />
+                      {descOverflows && !descExpanded && (
+                        <div
+                          className={styles.descFade}
+                          onClick={e => { e.stopPropagation(); setDescExpanded(true); }}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <span className={styles.descPlaceholder}>
+                      {readOnly ? 'No description.' : 'Add description...'}
+                    </span>
+                  )}
+                </div>
+                {descOverflows && !isDescriptionEmpty(formData.description) && (
+                  <button
+                    type="button"
+                    className={styles.descToggleBtn}
+                    onClick={() => setDescExpanded(v => !v)}
+                  >
+                    {descExpanded
+                      ? <><ChevronUp size={13} /> Show less</>
+                      : <><ChevronDown size={13} /> Show more</>
+                    }
+                  </button>
                 )}
-              </div>
+              </>
             )}
           </div>
 
@@ -826,7 +872,12 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
           <div className={styles.formGroup}>
             <label>Subtasks</label>
             <div className={styles.subtaskList}>
-              {(formData.subtasks || []).map(sub => {
+              {[...(formData.subtasks || [])].sort((a, b) => {
+                if (!a.started_at && !b.started_at) return 0;
+                if (!a.started_at) return 1;
+                if (!b.started_at) return -1;
+                return new Date(a.started_at) - new Date(b.started_at);
+              }).map(sub => {
                 const subtaskAssignee = users.find(u => u.id === sub.assigneeId);
                 const filteredUsers = getFilteredUsers(sub.id);
 
@@ -1226,9 +1277,9 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
                    type="button"
                    onClick={handleSendComment}
                    disabled={!newComment.trim() || isSendingComment || !actualTaskId}
-                   className={styles.commentSendBtn}
+                   className={styles.commentSendBtnFloat}
                  >
-                   <Send size={14} /> Send
+                   <Send size={15} strokeWidth={2.2} />
                  </button>
                </div>
              </div>
