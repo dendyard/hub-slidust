@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
-import { X, Plus, MessageSquare, CheckSquare, Clock, User } from 'lucide-react';
+import { X, Plus, MessageSquare, CheckSquare, Clock, User, Play, Flag, CalendarClock } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import styles from './TaskHistoryModal.module.css';
 
 /* ── Event type config ── */
 const TYPE = {
-  created:  { label: 'Task Created',   icon: Plus,          color: '#22c55e', bg: '#dcfce7' },
-  subtask:  { label: 'Subtask',        icon: CheckSquare,   color: '#f59e0b', bg: '#fef3c7' },
-  comment:  { label: 'Comment',        icon: MessageSquare, color: '#3b82f6', bg: '#dbeafe' },
-  assigned: { label: 'Assigned To',    icon: User,          color: '#a855f7', bg: '#f3e8ff' },
+  created:   { label: 'Task Created',  icon: Plus,          color: '#22c55e', bg: '#dcfce7' },
+  started:   { label: 'Started',       icon: Play,          color: '#3b82f6', bg: '#dbeafe' },
+  due:       { label: 'Due Date',      icon: CalendarClock, color: '#f97316', bg: '#ffedd5' },
+  done:      { label: 'Completed',     icon: Flag,          color: '#8b5cf6', bg: '#ede9fe' },
+  subtask:   { label: 'Subtask',       icon: CheckSquare,   color: '#f59e0b', bg: '#fef3c7' },
+  comment:   { label: 'Comment',       icon: MessageSquare, color: '#06b6d4', bg: '#cffafe' },
+  assigned:  { label: 'Assigned To',   icon: User,          color: '#a855f7', bg: '#f3e8ff' },
 };
 
 function fmtTime(ts) {
@@ -51,12 +54,54 @@ function buildTimeline(task, comments, users) {
       desc:      assignee?.name || 'Unknown',
       userName:  creator?.name  || 'Unknown',
       userAvatar: creator?.avatar || null,
-      extraAvatar: assignee?.avatar || null,
-      extraName:   assignee?.name  || null,
     });
   }
 
-  /* 3. Subtasks */
+  /* 3. Started */
+  if (task.startedAt) {
+    const startedBy = findUser(task.started_by);
+    items.push({
+      id:        'started',
+      type:      'started',
+      ts:        new Date(task.startedAt).getTime(),
+      date:      task.startedAt,
+      title:     'Task dimulai',
+      desc:      null,
+      userName:  startedBy?.name   || creator?.name  || 'Unknown',
+      userAvatar: startedBy?.avatar || creator?.avatar || null,
+    });
+  }
+
+  /* 4. Due Date */
+  if (task.due_date) {
+    items.push({
+      id:        'due',
+      type:      'due',
+      ts:        new Date(task.due_date).getTime(),
+      date:      task.due_date,
+      title:     'Deadline',
+      desc:      new Date(task.due_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+      userName:  creator?.name  || 'Unknown',
+      userAvatar: creator?.avatar || null,
+    });
+  }
+
+  /* 5. Completed */
+  if (task.completedAt) {
+    const completedBy = findUser(task.completed_by);
+    items.push({
+      id:        'done',
+      type:      'done',
+      ts:        new Date(task.completedAt).getTime(),
+      date:      task.completedAt,
+      title:     'Task selesai',
+      desc:      null,
+      userName:  completedBy?.name   || creator?.name  || 'Unknown',
+      userAvatar: completedBy?.avatar || creator?.avatar || null,
+    });
+  }
+
+  /* 7. Subtasks */
   (task.subtasks || []).forEach((s, i) => {
     const statusLabel = s.isDone === 1 ? 'Done' : s.isDone === 2 ? 'On Progress' : 'Backlog';
     const statusColor = s.isDone === 1 ? '#22c55e' : s.isDone === 2 ? '#3b82f6' : '#94a3b8';
@@ -73,7 +118,7 @@ function buildTimeline(task, comments, users) {
     });
   });
 
-  /* 4. Comments */
+  /* 8. Comments */
   (comments || []).forEach(c => {
     if (c.parent_id) return; // skip replies
     const plain = (c.message || '').replace(/<[^>]*>/g, '').trim();
