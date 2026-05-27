@@ -213,8 +213,7 @@ function Card({ item, c, Icon }) {
       )}
       <div className={styles.cardFooter}>
         <UserAvatar
-          name={item.userName}
-          avatar={item.userAvatar}
+          user={{ name: item.userName, avatar: item.userAvatar }}
           size={18}
         />
         <span className={styles.cardUser}>{item.userName}</span>
