@@ -1,0 +1,454 @@
+/* ── Overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.18s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Panel ── */
+.panel {
+  width: 460px;
+  max-width: 100vw;
+  height: 100vh;
+  background: var(--bg-surface, #fff);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -6px 0 32px rgba(0,0,0,0.10);
+  animation: slideIn 0.22s cubic-bezier(0.34, 1.1, 0.64, 1);
+  overflow: hidden;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: #1c1c1e;
+  border-bottom: none;
+  flex-shrink: 0;
+}
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.headerIcon {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.headerTitle {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+.headerSub {
+  font-size: 0.73rem;
+  color: rgba(255,255,255,0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 310px;
+}
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Export button */
+.exportWrap {
+  position: relative;
+}
+
+.exportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.exportBtn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.35);
+}
+.exportBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.exportSpinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--border-color, #e5e7eb);
+  border-top-color: var(--color-primary, #3b82f6);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.fmtDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  overflow: hidden;
+  z-index: 100;
+  min-width: 160px;
+}
+.fmtDropdown button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 14px;
+  border: none;
+  background: none;
+  color: var(--text-main, #111);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+.fmtDropdown button:hover {
+  background: var(--bg-hover, #f3f4f6);
+}
+
+.closeBtn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.75);
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.closeBtn:hover { background: rgba(255,255,255,0.2); }
+
+/* ── Stats bar ── */
+.statsBar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.statChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.statTotal {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--text-muted, #9ca3af);
+  font-weight: 500;
+}
+
+/* ── Body ── */
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 0 40px;
+}
+
+/* ── Empty ── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 220px;
+  color: var(--text-muted, #9ca3af);
+  text-align: center;
+}
+.empty p { font-size: 0.85rem; margin: 0; }
+
+/* ───────────────────────────────────────────
+   ZIGZAG TIMELINE
+   Left col (side) | Center (dot+date) | Right col (side)
+   each 40% | 20% | 40%
+─────────────────────────────────────────── */
+.timeline {
+  position: relative;
+  padding: 0 16px;
+}
+
+/* The single continuous vertical line */
+.verticalLine {
+  position: absolute;
+  left: 50%;
+  top: 100px;
+  bottom: 0;
+  width: 0;
+  transform: translateX(-50%);
+  border-left: 2px dashed #6b7280;
+  z-index: 0;
+}
+
+/* One event row */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Center column: date circle + dot ── */
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  z-index: 2;
+}
+
+.dateCircle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg-surface, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.dateCircleInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.dateDay {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.dateMon {
+  font-size: 0.55rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+/* Small connector dot (replaces the line dot) */
+.dotCenter {
+  display: none; /* hidden, the circle itself is the marker */
+}
+
+/* ── Side columns ── */
+.side {
+  display: flex;
+  align-items: center;
+}
+
+/* Right-side card: align left */
+.rowRight .side:last-child {
+  padding-left: 12px;
+}
+/* Left-side card: align right */
+.rowLeft .side:first-child {
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+/* ── Connector dashes from circle to card ── */
+.row::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 0;
+  width: 12px;
+  border-top: 1px dashed #6b7280;
+  z-index: 1;
+}
+.rowRight::before {
+  left: calc(50% + 28px);
+}
+.rowLeft::before {
+  right: calc(50% + 28px);
+}
+
+/* ── Event card ── */
+.card {
+  background: var(--bg-body, #fafafa);
+  border: none;
+  border-radius: 10px;
+  padding: 9px 11px;
+  width: 100%;
+  max-width: 160px;
+  transition: box-shadow 0.15s;
+}
+.card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.cardLabel {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+  opacity: 0.9;
+}
+
+.cardTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main, #111);
+  line-height: 1.3;
+  margin-bottom: 2px;
+  /* clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardDesc {
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-color, #f0f0f0);
+}
+
+.cardUser {
+  font-size: 0.68rem;
+  color: var(--text-muted, #6b7280);
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardTime {
+  font-size: 0.65rem;
+  color: var(--text-muted, #9ca3af);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Duration badge ── */
+.durationBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 0 auto 8px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: var(--bg-hover, #f3f4f6);
+  width: fit-content;
+  font-size: 0.76rem;
+  color: var(--text-muted, #6b7280);
+}
+.durationDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.durationText strong {
+  color: var(--text-main, #111);
+}
+.durationOngoing {
+  font-style: italic;
+  opacity: 0.75;
+}
+
+/* ── Export title (shown in exported image) ── */
+.exportTitle {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main, #111);
+  padding: 6px 16px 0;
+}
+.exportSub {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted, #9ca3af);
+  padding: 2px 16px 8px;
+}
+
+/* ── End cap ── */
+.endCap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 0;
+  position: relative;
+  z-index: 2;
+}
+.endDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #6b7280;
+}

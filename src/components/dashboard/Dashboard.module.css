@@ -90,9 +90,8 @@
   flex-wrap: wrap;
   padding: 10px 14px;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-sm);
 }
 
 .filterDivider {
@@ -269,13 +268,12 @@
 
 .summaryCard {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-sm);
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: var(--shadow-sm);
 }
 
 .cardIcon {
@@ -345,10 +343,9 @@
 /* Project Table */
 .projectTable {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-sm);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
   overflow-x: auto;
 }
 
@@ -475,10 +472,9 @@
 
 .taskTable {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-sm);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
 }
 
 .taskTableBody {
@@ -716,10 +712,9 @@
 /* Chart */
 .chartCard {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-sm);
   padding: 20px 16px 8px;
-  box-shadow: var(--shadow-sm);
 }
 
 .sectionDesc {

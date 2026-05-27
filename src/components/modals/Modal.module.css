@@ -325,7 +325,7 @@
 
 .leftPane {
   flex: 6;
-  padding: 28px 24px 24px;
+  padding: 14px 24px 24px;
   overflow-y: auto;
   z-index: 2;
   position: relative;
@@ -1063,6 +1063,7 @@ input:disabled + .slider {
   border-radius: var(--border-radius-sm);
   cursor: text;
   transition: background 0.15s;
+  position: relative;
 }
 .descPreview:hover {
   background: var(--bg-surface-hover);
@@ -1124,6 +1125,42 @@ input:disabled + .slider {
   color: var(--text-muted);
 }
 
+/* Description collapse / expand */
+.descPreviewCollapsed {
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.descFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--bg-surface));
+  cursor: pointer;
+}
+
+.descToggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.descToggleBtn:hover {
+  opacity: 0.7;
+}
+
 .wysiwyg {
   margin-top: 0;
 }
@@ -1177,6 +1214,25 @@ input:disabled + .slider {
   cursor: default;
 }
 
+.seeHistoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid #1c1c1e;
+  background: #1c1c1e;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.seeHistoryBtn:hover {
+  opacity: 0.8;
+}
+
 .commentCount {
   display: inline-flex;
   align-items: center;
@@ -1186,8 +1242,8 @@ input:disabled + .slider {
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: #1c1c1e;
+  color: #ffffff;
   font-size: 0.72rem;
   font-weight: 700;
   vertical-align: middle;
@@ -1482,23 +1538,22 @@ input:disabled + .slider {
 
 .commentInputBox {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  position: relative;
 }
 
 .commentInputBox textarea,
 .commentTextarea {
   width: 100%;
-  min-height: 60px;
+  min-height: 72px;
   resize: vertical;
-  padding: 10px;
+  padding: 10px 10px 38px;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   font-family: inherit;
   font-size: 0.9rem;
   background: var(--bg-body);
   color: var(--text-main);
+  box-sizing: border-box;
 }
 
 .commentInputBox textarea:focus,
@@ -1528,22 +1583,62 @@ input:disabled + .slider {
 }
 
 .commentSendBtn {
-  align-self: flex-end;
   background-color: var(--color-primary);
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border-radius: var(--border-radius-sm);
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.82rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  transition: opacity 0.15s;
+}
+
+.commentSendBtn:hover:not(:disabled) {
+  opacity: 0.88;
 }
 
 .commentSendBtn:disabled {
   background: transparent;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Send button floating inside the comment textarea */
+.commentSendBtnFloat {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 2;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.commentSendBtnFloat:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: scale(1.06);
+}
+
+.commentSendBtnFloat:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.commentSendBtnFloat:disabled {
+  background-color: var(--bg-hover);
   color: var(--text-muted);
   cursor: not-allowed;
 }
