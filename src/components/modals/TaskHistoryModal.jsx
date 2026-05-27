@@ -137,6 +137,39 @@ function buildTimeline(task, comments, users) {
   return items.sort((a, b) => a.ts - b.ts);
 }
 
+/* ── Duration Badge ── */
+function DurationBadge({ task }) {
+  if (!task?.startedAt) return null;
+
+  const start     = new Date(task.startedAt);
+  const end       = task.completedAt ? new Date(task.completedAt) : new Date();
+  const diffMs    = end - start;
+  const diffDays  = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const isDone    = Boolean(task.completedAt);
+
+  let label = '';
+  if (diffDays > 0) {
+    label = `${diffDays} hari${diffHours > 0 ? ` ${diffHours} jam` : ''}`;
+  } else if (diffHours > 0) {
+    label = `${diffHours} jam`;
+  } else {
+    const diffMin = Math.floor(diffMs / (1000 * 60));
+    label = `${diffMin} menit`;
+  }
+
+  return (
+    <div className={styles.durationBadge}>
+      <span className={styles.durationDot} style={{ background: isDone ? '#8b5cf6' : '#3b82f6' }} />
+      <span className={styles.durationText}>
+        {isDone ? 'Selesai dalam' : 'Berjalan'}{' '}
+        <strong>{label}</strong>
+        {!isDone && <span className={styles.durationOngoing}> · sedang berjalan</span>}
+      </span>
+    </div>
+  );
+}
+
 /* ── Export helper ── */
 async function exportTimeline(el, format, filename) {
   const html2canvas = (await import('html2canvas')).default;
@@ -249,6 +282,7 @@ export default function TaskHistoryModal({ task, comments, users, onClose }) {
               {/* Title for export */}
               <div className={styles.exportTitle}>{task?.title}</div>
               <div className={styles.exportSub}>Task Timeline · {items.length} events</div>
+              <DurationBadge task={task} />
 
               {/* Continuous vertical line */}
               <div className={styles.verticalLine} />
