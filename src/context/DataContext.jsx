@@ -34,6 +34,7 @@ export const authFetch = async (url, options = {}) => {
 const parseTasks = (data) =>
   (Array.isArray(data) ? data : []).map(t => ({
     ...t,
+    priority: t.priority ?? 'Low',   // guard against legacy NULL rows in DB
     subtasks: (t.subtasks || []).map(s => ({ ...s, isDone: Number(s.isDone) }))
   }));
 
