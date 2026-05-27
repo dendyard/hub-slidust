@@ -35,7 +35,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 18px;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  background: #1c1c1e;
+  border-bottom: none;
   flex-shrink: 0;
 }
 .headerLeft {
@@ -47,7 +48,7 @@
 .headerIcon {
   width: 32px; height: 32px;
   border-radius: 9px;
-  background: #1c1c1e;
+  background: rgba(255,255,255,0.12);
   color: #fff;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -55,12 +56,12 @@
 .headerTitle {
   font-size: 0.92rem;
   font-weight: 700;
-  color: var(--text-main, #111);
+  color: #ffffff;
   line-height: 1.2;
 }
 .headerSub {
   font-size: 0.73rem;
-  color: var(--text-muted, #6b7280);
+  color: rgba(255,255,255,0.55);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -85,9 +86,9 @@
   padding: 0 10px;
   height: 30px;
   border-radius: 8px;
-  border: 1px solid var(--border-color, #e5e7eb);
-  background: var(--bg-body, #fafafa);
-  color: var(--text-main, #111);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -95,12 +96,11 @@
   white-space: nowrap;
 }
 .exportBtn:hover:not(:disabled) {
-  background: #1c1c1e;
-  color: #fff;
-  border-color: #1c1c1e;
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.35);
 }
 .exportBtn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -146,17 +146,17 @@
 }
 
 .closeBtn {
-  background: var(--bg-hover, #f3f4f6);
-  border: none;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
   width: 30px; height: 30px;
   border-radius: 8px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted, #6b7280);
+  color: rgba(255,255,255,0.75);
   flex-shrink: 0;
   transition: background 0.15s;
 }
-.closeBtn:hover { background: var(--border-color, #e5e7eb); }
+.closeBtn:hover { background: rgba(255,255,255,0.2); }
 
 /* ── Stats bar ── */
 .statsBar {
