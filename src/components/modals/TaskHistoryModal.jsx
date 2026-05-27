@@ -127,8 +127,8 @@ function buildTimeline(task, comments, users) {
       type:      'comment',
       ts:        new Date(c.created_at).getTime(),
       date:      c.created_at,
-      title:     c.user_name || 'User',
-      desc:      plain.slice(0, 100) + (plain.length > 100 ? '…' : ''),
+      title:     plain.slice(0, 80) + (plain.length > 80 ? '…' : ''),
+      desc:      null,
       userName:  c.user_name   || 'User',
       userAvatar: c.user_avatar || null,
     });
