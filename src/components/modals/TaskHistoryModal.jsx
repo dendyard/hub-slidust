@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { X, Plus, MessageSquare, CheckSquare, Clock, User, Play, Flag, CalendarClock } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
+import { X, Plus, MessageSquare, CheckSquare, Clock, User, Play, Flag, CalendarClock, Download, ImageDown } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import styles from './TaskHistoryModal.module.css';
 
@@ -137,9 +137,47 @@ function buildTimeline(task, comments, users) {
   return items.sort((a, b) => a.ts - b.ts);
 }
 
+/* ── Export helper ── */
+async function exportTimeline(el, format, filename) {
+  const html2canvas = (await import('html2canvas')).default;
+  const canvas = await html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: '#ffffff',
+    scrollX: 0,
+    scrollY: 0,
+    width: el.scrollWidth,
+    height: el.scrollHeight,
+    windowWidth: el.scrollWidth,
+    windowHeight: el.scrollHeight,
+  });
+  const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+  const url = canvas.toDataURL(mimeType, 0.95);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${filename}.${format}`;
+  a.click();
+}
+
 /* ── Main ── */
 export default function TaskHistoryModal({ task, comments, users, onClose }) {
-  const items = useMemo(() => buildTimeline(task, comments, users), [task, comments, users]);
+  const items       = useMemo(() => buildTimeline(task, comments, users), [task, comments, users]);
+  const exportRef   = useRef(null);
+  const [exporting, setExporting] = useState(false);
+  const [showFmt,   setShowFmt]   = useState(false);
+
+  const handleExport = async (format) => {
+    if (!exportRef.current) return;
+    setShowFmt(false);
+    setExporting(true);
+    try {
+      const slug = (task?.title || 'timeline').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      await exportTimeline(exportRef.current, format, `timeline_${slug}`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <div className={styles.overlay} onClick={e => e.target === e.currentTarget && onClose()}>
@@ -154,7 +192,33 @@ export default function TaskHistoryModal({ task, comments, users, onClose }) {
               <div className={styles.headerSub} title={task?.title}>{task?.title}</div>
             </div>
           </div>
-          <button className={styles.closeBtn} onClick={onClose}><X size={17} /></button>
+          <div className={styles.headerActions}>
+            {/* Export button */}
+            <div className={styles.exportWrap}>
+              <button
+                className={styles.exportBtn}
+                onClick={() => setShowFmt(v => !v)}
+                disabled={exporting || items.length === 0}
+                title="Export timeline"
+              >
+                {exporting
+                  ? <span className={styles.exportSpinner} />
+                  : <><ImageDown size={14} /><span>Export</span></>
+                }
+              </button>
+              {showFmt && (
+                <div className={styles.fmtDropdown}>
+                  <button onClick={() => handleExport('png')}>
+                    <Download size={13} /> Export as PNG
+                  </button>
+                  <button onClick={() => handleExport('jpg')}>
+                    <Download size={13} /> Export as JPG
+                  </button>
+                </div>
+              )}
+            </div>
+            <button className={styles.closeBtn} onClick={onClose}><X size={17} /></button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -181,7 +245,11 @@ export default function TaskHistoryModal({ task, comments, users, onClose }) {
               <p>Belum ada data timeline</p>
             </div>
           ) : (
-            <div className={styles.timeline}>
+            <div className={styles.timeline} ref={exportRef}>
+              {/* Title for export */}
+              <div className={styles.exportTitle}>{task?.title}</div>
+              <div className={styles.exportSub}>Task Timeline · {items.length} events</div>
+
               {/* Continuous vertical line */}
               <div className={styles.verticalLine} />
 
