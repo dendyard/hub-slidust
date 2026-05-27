@@ -1,9 +1,16 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import UserPerformance from '../board/UserPerformance';
-import { ChevronDown, X, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, X, CheckCircle2, RefreshCw, PlusCircle, CalendarDays } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import styles from './Dashboard.module.css';
+
+const STAT_CARDS = [
+  { key: 'completed', label: 'completed', sub: 'in the last 7 days', Icon: CheckCircle2, color: '#15803d', bg: '#dcfce7' },
+  { key: 'updated',   label: 'updated',   sub: 'in the last 7 days', Icon: RefreshCw,    color: '#2563eb', bg: '#dbeafe' },
+  { key: 'created',   label: 'created',   sub: 'in the last 7 days', Icon: PlusCircle,   color: '#6d28d9', bg: '#ede9fe' },
+  { key: 'dueSoon',   label: 'due soon',  sub: 'in the next 7 days', Icon: CalendarDays, color: '#b45309', bg: '#fef3c7' },
+];
 
 /* Dropdown component */
 const FilterDropdown = ({ options, value, onChange, placeholder }) => {
@@ -173,10 +180,27 @@ const Dashboard = ({ onTaskClick }) => {
   }, [filteredTasks, filterStatus, projects, users, accessibleWorkflows]);
 
 
-  const totalTasks = filteredTasks.length;
-  const openTasks  = filteredTasks.filter(t => stageMap[t.status]?.type === 'BACKLOG').length;
-  const inProgress = filteredTasks.filter(t => stageMap[t.status]?.type === 'PROGRESS').length;
-  const doneTasks  = filteredTasks.filter(t => stageMap[t.status]?.type === 'DONE').length;
+  const statsCards = useMemo(() => {
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const sevenDaysAgo   = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const sevenDaysLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return {
+      completed: filteredTasks.filter(t => {
+        if (stageMap[t.status]?.type !== 'DONE') return false;
+        return new Date(t.updated_at) >= sevenDaysAgo;
+      }).length,
+      updated: filteredTasks.filter(t => {
+        const ua = new Date(t.updated_at), ca = new Date(t.created_at);
+        return ua >= sevenDaysAgo && (ua - ca) > 60_000;
+      }).length,
+      created:  filteredTasks.filter(t => new Date(t.created_at) >= sevenDaysAgo).length,
+      dueSoon:  filteredTasks.filter(t => {
+        if (!t.due_date) return false;
+        const due = new Date(t.due_date + 'T00:00:00');
+        return due >= now && due <= sevenDaysLater;
+      }).length,
+    };
+  }, [filteredTasks, stageMap]);
 
 
   /* ── Filtered users (for UserPerformance) ── */
@@ -220,25 +244,20 @@ const Dashboard = ({ onTaskClick }) => {
   return (
     <div className={styles.dashboard}>
 
-      {/* ── Open Task bar ── */}
-      <div className={styles.headerCard}>
-        <div className={styles.headerStats}>
-          {[
-            { label: 'Open Task',   value: openTasks  },
-            { label: 'On Progress', value: inProgress },
-            { label: 'Done',        value: doneTasks  },
-            { label: 'Total Task',  value: totalTasks },
-          ].map(s => (
-            <div key={s.label} className={styles.headerContrib}>
-              <span className={styles.bigNum}>{s.value}</span>
-              <div className={styles.headerRight}>
-                {s.label.split(' ').map(word => (
-                  <span key={word} className={styles.headerLine}>{word}</span>
-                ))}
-              </div>
+      {/* ── Summary stat cards ── */}
+      <div className={styles.summaryGrid}>
+        {STAT_CARDS.map(card => (
+          <div key={card.key} className={styles.summaryCard}>
+            <div className={styles.cardIcon} style={{ background: card.bg, color: card.color }}>
+              <card.Icon size={20} />
             </div>
-          ))}
-        </div>
+            <div>
+              <div className={styles.cardValue}>{statsCards[card.key]}</div>
+              <div className={styles.cardLabel}>{card.label}</div>
+              <div className={styles.cardSub}>{card.sub}</div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* ── Unified filter bar ── */}
@@ -331,19 +350,22 @@ const Dashboard = ({ onTaskClick }) => {
 
         {/* Tasks Done — columns: Task | Done by | Completed */}
         <div className={styles.section}>
-          <div className={styles.doneTitleRow}>
-            <CheckCircle2 size={15} style={{ color: '#22c55e', flexShrink: 0 }} />
-            <span className={styles.sectionTitle}>Tasks Done This Week</span>
-            <span className={styles.doneBadge}>{doneThisWeek.length}</span>
-            {(!isThisWeek && (doneFrom || doneTo)) && (
-              <span className={styles.rangeLabel}>
-                {fmtDateLabel(doneFrom)} – {fmtDateLabel(doneTo)}
-              </span>
-            )}
+          <div className={styles.sectionTitleArea}>
+            <div className={styles.doneTitleRow}>
+              <CheckCircle2 size={15} style={{ color: '#22c55e', flexShrink: 0 }} />
+              <span className={styles.sectionTitle}>Tasks Done This Week</span>
+              <span className={styles.doneBadge}>{doneThisWeek.length}</span>
+              {(!isThisWeek && (doneFrom || doneTo)) && (
+                <span className={styles.rangeLabel}>
+                  {fmtDateLabel(doneFrom)} – {fmtDateLabel(doneTo)}
+                </span>
+              )}
+            </div>
           </div>
           <div className={styles.taskTable}>
             <div className={styles.taskTableHeadSm}>
               <span className={styles.tcTitle}>Task</span>
+              <span className={styles.tcProjectSm}>Project</span>
               <span className={styles.tcDoneBy}>Done by</span>
               <span className={styles.tcUpdated}>Completed</span>
             </div>
@@ -358,6 +380,7 @@ const Dashboard = ({ onTaskClick }) => {
                     onClick={() => onTaskClick && onTaskClick(t.id)}
                   >
                     <span className={styles.tcTitle}>{t.title}</span>
+                    <span className={styles.tcProjectSm}>{t._project?.name || '—'}</span>
                     <span className={styles.tcDoneBy}>
                       {t._completedBy
                         ? (
@@ -379,10 +402,13 @@ const Dashboard = ({ onTaskClick }) => {
 
         {/* Latest Tasks — columns: Task | Assignee | Status */}
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Latest Tasks</h3>
+          <div className={styles.sectionTitleArea}>
+            <h3 className={styles.sectionTitle}>Latest Tasks</h3>
+          </div>
           <div className={styles.taskTable}>
             <div className={styles.taskTableHeadSm}>
               <span className={styles.tcTitle}>Task</span>
+              <span className={styles.tcProjectSm}>Project</span>
               <span className={styles.tcAssignee}>By</span>
               <span className={styles.tcStatus}>Status</span>
             </div>
@@ -401,6 +427,7 @@ const Dashboard = ({ onTaskClick }) => {
                       onClick={() => onTaskClick && onTaskClick(t.id)}
                     >
                       <span className={styles.tcTitle}>{t.title}</span>
+                      <span className={styles.tcProjectSm}>{t._project?.name || '—'}</span>
                       <span className={styles.tcAssignee}>
                         {t._assignee
                           ? <UserAvatar user={t._assignee} size={24} title={t._assignee.name} />
