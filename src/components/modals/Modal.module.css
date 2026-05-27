@@ -1223,8 +1223,8 @@ input:disabled + .slider {
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: #1c1c1e;
+  color: #ffffff;
   font-size: 0.72rem;
   font-weight: 700;
   vertical-align: middle;
