@@ -7,17 +7,20 @@ on:
 
 jobs:
   deploy:
-    name: SSH Deploy
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
+      - name: Build & Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 10m
           script: |
             cd /www/wwwroot/github/hub-slidust
             git pull origin main
+            npm ci
+            npm run build
             echo "✅ Deploy selesai: $(date)"
