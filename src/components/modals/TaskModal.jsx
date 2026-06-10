@@ -684,9 +684,9 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
                 type="button"
                 className={`${styles.copyLinkBtn} ${copied ? styles.copyLinkBtnDone : ''}`}
                 onClick={handleCopyLink}
-                title="Copy task link"
+                title={copied ? 'Link copied!' : 'Copy task link'}
               >
-                {copied ? <><Check size={12} />Copied!</> : <><Link2 size={12} />Copy link</>}
+                {copied ? <Check size={14} /> : <Link2 size={14} />}
               </button>
             )}
           </div>
