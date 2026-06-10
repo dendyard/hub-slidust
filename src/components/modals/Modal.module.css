@@ -104,8 +104,41 @@
 /* Inline title */
 .titleGroup {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.titleGroup textarea {
+  flex: 1;
+  min-width: 0;
+}
+
+.copyLinkBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover, #f3f4f6);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+  margin-top: 6px;
+}
+.copyLinkBtn:hover {
+  background: #1c1c1e;
+  color: #fff;
+  border-color: #1c1c1e;
+  transform: scale(1.05);
+}
+.copyLinkBtnDone {
+  background: #22c55e !important;
+  color: #fff !important;
+  border-color: #22c55e !important;
 }
 
 .titleInput {
