@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useData, API_BASE, resolveUploadUrl, authFetch } from '../../context/DataContext';
-import { X, Plus, Trash2, MessageSquare, Send, MoreHorizontal, UploadCloud, Paperclip, ChevronDown, ChevronUp, UserPlus, FolderOpen, ExternalLink, History } from 'lucide-react';
+import { X, Plus, Trash2, MessageSquare, Send, MoreHorizontal, UploadCloud, Paperclip, ChevronDown, ChevronUp, UserPlus, FolderOpen, ExternalLink, History, Link2, Check } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import MentionTextarea, { nameToHandle, extractMentionHandles } from '../ui/MentionTextarea';
 import ReactQuill from 'react-quill-new';
@@ -133,6 +133,7 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [confirmDeleteSubId, setConfirmDeleteSubId] = useState(null);
   const [descEditing, setDescEditing] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
@@ -143,6 +144,52 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
   const isDirtyRef            = useRef(false);
 
   const canDeleteTask = currentUser?.role === 'admin' || currentUser?.role === 'manager' || existingTask?.created_by === currentUser?.id;
+
+  /* ── Task URL & copy link ── */
+  const getTaskUrl = () => {
+    const base = window.location.origin;
+    return `${base}/board/${taskProjectId}?task=${actualTaskId}`;
+  };
+
+  const handleCopyLink = () => {
+    if (!actualTaskId) return;
+    navigator.clipboard.writeText(getTaskUrl()).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  /* ── Dynamic OG meta tags ── */
+  useEffect(() => {
+    if (!actualTaskId || !formData.title) return;
+    const taskUrl   = getTaskUrl();
+    const plainDesc = (formData.description || '').replace(/<[^>]*>/g, '').trim().slice(0, 160);
+    const prevTitle = document.title;
+
+    const setMeta = (prop, content, isName = false) => {
+      const sel = isName ? `meta[name="${prop}"]` : `meta[property="${prop}"]`;
+      let el = document.querySelector(sel);
+      if (!el) {
+        el = document.createElement('meta');
+        isName ? el.setAttribute('name', prop) : el.setAttribute('property', prop);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+
+    document.title = `${formData.title} · Slidust`;
+    setMeta('og:title',       formData.title);
+    setMeta('og:description', plainDesc || 'View this task on Slidust');
+    setMeta('og:url',         taskUrl);
+    setMeta('og:type',        'article');
+    setMeta('twitter:title',       formData.title,                      true);
+    setMeta('twitter:description', plainDesc || 'View this task on Slidust', true);
+    setMeta('twitter:card',        'summary',                           true);
+
+    return () => {
+      document.title = prevTitle;
+    };
+  }, [actualTaskId, formData.title, formData.description]);
 
   const titleRef = useRef(null);
   const quillRef  = useRef(null);
@@ -632,6 +679,16 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
               rows={1}
               readOnly={readOnly}
             />
+            {actualTaskId && (
+              <button
+                type="button"
+                className={`${styles.copyLinkBtn} ${copied ? styles.copyLinkBtnDone : ''}`}
+                onClick={handleCopyLink}
+                title="Copy task link"
+              >
+                {copied ? <><Check size={12} />Copied!</> : <><Link2 size={12} />Copy link</>}
+              </button>
+            )}
           </div>
 
           <div className={styles.formGroup}>

@@ -108,6 +108,33 @@
   gap: 4px;
 }
 
+.copyLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.copyLinkBtn:hover {
+  background: #1c1c1e;
+  color: #fff;
+  border-color: #1c1c1e;
+}
+.copyLinkBtnDone {
+  background: #1c1c1e !important;
+  color: #fff !important;
+  border-color: #1c1c1e !important;
+}
+
 .titleInput {
   font-size: 1.55rem !important;
   font-weight: 700 !important;
