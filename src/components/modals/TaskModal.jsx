@@ -145,6 +145,8 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
 
   const canDeleteTask = currentUser?.role === 'admin' || currentUser?.role === 'manager' || existingTask?.created_by === currentUser?.id;
 
+  const actualTaskId = existingTask ? existingTask.id : createdTempId;
+
   /* ── Task URL & copy link ── */
   const getTaskUrl = () => {
     const base = window.location.origin;
@@ -272,8 +274,6 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
     setIsDirty(false);
     setIsInitialLoad(false);
   }, [existingTask]);
-
-  const actualTaskId = existingTask ? existingTask.id : createdTempId;
 
   // Fetch Attachments
   useEffect(() => {
