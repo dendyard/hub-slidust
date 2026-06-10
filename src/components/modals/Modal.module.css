@@ -122,9 +122,9 @@
   width: 30px;
   height: 30px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover, #f3f4f6);
-  color: var(--text-muted);
+  border: 1px solid transparent;
+  background: transparent;
+  color: #374151;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
   margin-top: 6px;

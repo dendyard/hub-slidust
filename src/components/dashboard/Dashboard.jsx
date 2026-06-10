@@ -1,9 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useData } from '../../context/DataContext';
+import { useData, authFetch } from '../../context/DataContext';
 import UserPerformance from '../board/UserPerformance';
-import { ChevronDown, X, CheckCircle2, RefreshCw, PlusCircle, CalendarDays } from 'lucide-react';
+import { ChevronDown, X, CheckCircle2, RefreshCw, PlusCircle, CalendarDays, MessageSquare } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import styles from './Dashboard.module.css';
+
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 const STAT_CARDS = [
   { key: 'completed', label: 'completed', sub: 'in the last 7 days', Icon: CheckCircle2, color: '#15803d', bg: '#dcfce7' },
@@ -86,6 +88,15 @@ const Dashboard = ({ onTaskClick }) => {
   const { tasks, projects, workflows, users, positions, currentUser, fetchAllTasks } = useData();
 
   useEffect(() => { fetchAllTasks(); }, [fetchAllTasks]);
+
+  /* ── Latest Comments ── */
+  const [recentComments, setRecentComments] = useState([]);
+  useEffect(() => {
+    authFetch(`${API_BASE}/comments/recent?limit=20`)
+      .then(r => r.json())
+      .then(data => setRecentComments(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
 
   /* ── Scope to accessible projects only ── */
   const accessibleIds = useMemo(() => new Set(projects.map(p => p.id)), [projects]);
@@ -395,6 +406,53 @@ const Dashboard = ({ onTaskClick }) => {
                     <span className={styles.tcUpdated}>{formatRelative(t.completedAt)}</span>
                   </div>
                 ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Latest Comments */}
+        <div className={styles.section}>
+          <div className={styles.sectionTitleArea}>
+            <div className={styles.doneTitleRow}>
+              <MessageSquare size={15} style={{ color: '#6366f1', flexShrink: 0 }} />
+              <span className={styles.sectionTitle}>Latest Comments</span>
+              <span className={styles.doneBadge} style={{ background: '#ede9fe', color: '#6d28d9' }}>{recentComments.length}</span>
+            </div>
+          </div>
+          <div className={styles.taskTable}>
+            <div className={styles.taskTableHeadSm}>
+              <span className={styles.tcCommentBy}></span>
+              <span className={styles.tcCommentTask}>Task</span>
+              <span className={styles.tcComment}>Comment</span>
+              <span className={styles.tcCommentTime}>Time</span>
+            </div>
+            <div className={styles.taskTableBodySm}>
+              {recentComments.length === 0 ? (
+                <p className={styles.taskTableEmpty}>Belum ada komentar.</p>
+              ) : (
+                recentComments.map(c => {
+                  const plain = (c.message || '').replace(/<[^>]*>/g, '').trim();
+                  const taskObj = tasks.find(t => t.id === c.task_id);
+                  return (
+                    <div
+                      key={c.id}
+                      className={`${styles.taskTableRowSm} ${onTaskClick ? styles.taskTableRowClickable : ''}`}
+                      onClick={() => onTaskClick && c.task_id && onTaskClick(c.task_id)}
+                    >
+                      <span className={styles.tcCommentBy}>
+                        <UserAvatar
+                          user={{ name: c.user_name, avatar: c.user_avatar }}
+                          size={22}
+                          title={c.user_name}
+                        />
+                      </span>
+                      <span className={styles.tcCommentTask}>{c.task_title || taskObj?.title || '—'}</span>
+                      <span className={styles.tcComment}>{plain || '—'}</span>
+                      <span className={styles.tcCommentTime}>{formatRelative(c.created_at)}</span>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
