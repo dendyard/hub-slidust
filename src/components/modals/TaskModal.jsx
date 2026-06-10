@@ -686,7 +686,7 @@ const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInP
                 onClick={handleCopyLink}
                 title={copied ? 'Link copied!' : 'Copy task link'}
               >
-                {copied ? <Check size={14} /> : <Link2 size={14} />}
+                {copied ? <Check size={20} /> : <Link2 size={20} />}
               </button>
             )}
           </div>
