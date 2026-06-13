@@ -18,10 +18,14 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 10m
+          envs: VITE_OPENAI_API_KEY
           script: |
             set -e
             cd /www/wwwroot/github/hub-slidust
             git pull origin main
             npm ci --legacy-peer-deps
+            echo "VITE_OPENAI_API_KEY=$VITE_OPENAI_API_KEY" > .env
             npm run build
             echo "✅ Deploy selesai: $(date)"
+        env:
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
