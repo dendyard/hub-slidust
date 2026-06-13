@@ -277,6 +277,12 @@
   color: var(--text-muted);
 }
 
+.createTaskWrap {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
 .createTaskBtn {
   display: flex;
   align-items: center;
@@ -284,7 +290,7 @@
   padding: 7px 14px;
   background: var(--color-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 8px 0 0 8px;
   color: #fff;
   font-size: 0.82rem;
   font-weight: 600;
@@ -295,6 +301,71 @@
 .createTaskBtn:hover {
   opacity: 0.88;
   transform: translateY(-1px);
+}
+
+.createTaskChevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 100%;
+  min-height: 32px;
+  background: var(--color-primary);
+  border: none;
+  border-left: 1px solid rgba(255,255,255,0.25);
+  border-radius: 0 8px 8px 0;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  padding: 0;
+}
+.createTaskChevron:hover { opacity: 0.8; }
+
+.createTaskMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  overflow: hidden;
+  z-index: 200;
+  min-width: 200px;
+}
+
+.createTaskMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  color: var(--text-main, #111);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+.createTaskMenuItem:hover { background: var(--bg-hover, #f3f4f6); }
+
+.createTaskMenuItemAI {
+  color: #6d28d9;
+  font-weight: 600;
+}
+.createTaskMenuItemAI:hover { background: #f5f3ff; }
+
+.aiBadge {
+  margin-left: auto;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
 }
 
 .workflowBtn {

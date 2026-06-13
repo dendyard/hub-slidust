@@ -56,6 +56,7 @@ function App() {
 
   const [activeTaskId, setActiveTaskId] = useState(() => getTaskIdFromUrl());
   const [taskReadOnly, setTaskReadOnly] = useState(false);
+  const [taskInitialData, setTaskInitialData] = useState(null);
   const prevUserRef = useRef(currentUser);
 
   // Redirect to dashboard after fresh login (null → user transition)
@@ -134,11 +135,12 @@ function App() {
     document.title = `Slidust | ${pageName}`;
   }, [activePage, activeProjectId, projects]);
 
-  const handleTaskClick = (taskId, status = null) => {
+  const handleTaskClick = (taskId, status = null, aiData = null) => {
     setActiveTaskId(taskId);
     setInitialStatusForNew(status);
     setTaskReadOnly(false);
     setTaskShowProjectContext(false);
+    setTaskInitialData(aiData || null);
     if (taskId && activePage !== 'myboard') setActivePage('board');
   };
 
@@ -160,6 +162,7 @@ function App() {
     setInitialStatusForNew(null);
     setTaskReadOnly(false);
     setTaskShowProjectContext(false);
+    setTaskInitialData(null);
   };
 
   const handleOpenInProject = (projectId) => {
@@ -251,10 +254,11 @@ function App() {
       {showUsersModal && <UserModal onClose={() => setShowUsersModal(false)} />}
       {showProjectModal && <ProjectModal onClose={() => setShowProjectModal(false)} />}
       {showOrgsModal && <OrganizationModal onClose={() => setShowOrgsModal(false)} />}
-      {(activeTaskId || initialStatusForNew) && (
+      {(activeTaskId || initialStatusForNew || taskInitialData) && (
         <TaskModal
           taskId={activeTaskId}
           initialStatus={initialStatusForNew}
+          initialData={taskInitialData}
           onClose={handleCloseTask}
           readOnly={taskReadOnly}
           onOpenInProject={taskShowProjectContext ? handleOpenInProject : undefined}

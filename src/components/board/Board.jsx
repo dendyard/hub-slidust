@@ -7,8 +7,9 @@ import BoardCalendar from './BoardCalendar';
 import BoardRoadmap from './BoardRoadmap';
 import BoardList from './BoardList';
 import BoardNotes from './BoardNotes';
-import { Search, GitBranch, Plus, LayoutDashboard, BarChart2, CalendarDays, Map, List, StickyNote } from 'lucide-react';
+import { Search, GitBranch, Plus, LayoutDashboard, BarChart2, CalendarDays, Map, List, StickyNote, Sparkles, ChevronDown } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
+import AIWizardModal from '../modals/AIWizardModal';
 import styles from './Board.module.css';
 
 const Board = ({ onTaskClick, onTickerTaskClick }) => {
@@ -22,6 +23,9 @@ const Board = ({ onTaskClick, onTickerTaskClick }) => {
   const [glowTaskId, setGlowTaskId] = useState(null);
   const [noteCreateTrigger, setNoteCreateTrigger] = useState(0);
   const [showMoreAvatars, setShowMoreAvatars] = useState(false);
+  const [showCreateMenu, setShowCreateMenu] = useState(false);
+  const [showAIWizard, setShowAIWizard] = useState(false);
+  const createMenuRef = useRef(null);
   const [avatarSearch, setAvatarSearch] = useState('');
   const [isNarrow, setIsNarrow] = useState(window.innerWidth < 1370);
   const [isCompact, setIsCompact] = useState(window.innerWidth < 1310);
@@ -35,6 +39,16 @@ const Board = ({ onTaskClick, onTickerTaskClick }) => {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  useEffect(() => {
+    if (!showCreateMenu) return;
+    const handler = (e) => {
+      if (createMenuRef.current && !createMenuRef.current.contains(e.target))
+        setShowCreateMenu(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showCreateMenu]);
 
   useEffect(() => {
     if (!showMoreAvatars) { setAvatarSearch(''); return; }
@@ -119,6 +133,7 @@ const Board = ({ onTaskClick, onTickerTaskClick }) => {
   };
 
   return (
+    <>
     <div className={styles.boardContainer}>
       <ActivityTicker staleTasks={staleTasks} onTaskClick={onTickerTaskClick ?? onTaskClick} />
       <div className={`${styles.boardToolbar} ${hasTicker ? styles.boardToolbarShifted : ''}`}>
@@ -245,13 +260,41 @@ const Board = ({ onTaskClick, onTickerTaskClick }) => {
         </div>
 
         {activeTab === 'board' && (
-          <button
-            className={styles.createTaskBtn}
-            onClick={() => onTaskClick(null, stages[0]?.id || null)}
-          >
-            <Plus size={15} />
-            {!isCompact && 'Create Task'}
-          </button>
+          <div className={styles.createTaskWrap} ref={createMenuRef}>
+            <button
+              className={styles.createTaskBtn}
+              onClick={() => onTaskClick(null, stages[0]?.id || null)}
+            >
+              <Plus size={15} />
+              {!isCompact && 'Create Task'}
+            </button>
+            <button
+              className={styles.createTaskChevron}
+              onClick={() => setShowCreateMenu(v => !v)}
+              title="More options"
+            >
+              <ChevronDown size={13} />
+            </button>
+            {showCreateMenu && (
+              <div className={styles.createTaskMenu}>
+                <button
+                  className={styles.createTaskMenuItem}
+                  onClick={() => { setShowCreateMenu(false); onTaskClick(null, stages[0]?.id || null); }}
+                >
+                  <Plus size={14} />
+                  <span>Create Task</span>
+                </button>
+                <button
+                  className={`${styles.createTaskMenuItem} ${styles.createTaskMenuItemAI}`}
+                  onClick={() => { setShowCreateMenu(false); setShowAIWizard(true); }}
+                >
+                  <Sparkles size={14} />
+                  <span>Create with AI Wizard</span>
+                  <span className={styles.aiBadge}>AI</span>
+                </button>
+              </div>
+            )}
+          </div>
         )}
         {activeTab === 'notes' && (
           <button
@@ -332,6 +375,18 @@ const Board = ({ onTaskClick, onTickerTaskClick }) => {
       )}
 
     </div>
+
+    {showAIWizard && (
+      <AIWizardModal
+        initialStatus={stages[0]?.id || null}
+        onClose={() => setShowAIWizard(false)}
+        onConfirm={(aiData) => {
+          setShowAIWizard(false);
+          onTaskClick(null, aiData.status, aiData);
+        }}
+      />
+    )}
+    </>
   );
 };
 
