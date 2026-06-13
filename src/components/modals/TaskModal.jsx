@@ -43,21 +43,21 @@ const renderMessage = (message) => {
   });
 };
 
-const TaskModal = ({ taskId, initialStatus, onClose, readOnly = false, onOpenInProject }) => {
+const TaskModal = ({ taskId, initialStatus, initialData, onClose, readOnly = false, onOpenInProject }) => {
   const { currentUser, tasks, users, projects, projectMembers, activeProjectId, addTask, updateTask, deleteTask, patchTask, pollTasks, getProjectWorkflow } = useData();
   const existingTask = taskId ? tasks.find(t => t.id === taskId) : null;
   const taskProjectId = existingTask?.projectId ?? activeProjectId;
   const projectUsers = users.filter(u => projectMembers.some(pm => pm.project_id === taskProjectId && pm.user_id === u.id));
   const defaultStageId = initialStatus || getProjectWorkflow(taskProjectId)[0]?.id || '';
   const [formData, setFormData] = useState(existingTask || {
-    title: '',
-    description: '',
-    status: defaultStageId,
-    priority: 'Low',
-    assignee: currentUser?.id || '',
-    subtasks: [],
-    start_date: '',
-    due_date: ''
+    title:       initialData?.title       || '',
+    description: initialData?.description || '',
+    status:      initialData?.status      || defaultStageId,
+    priority:    'Low',
+    assignee:    currentUser?.id          || '',
+    subtasks:    initialData?.subtasks    || [],
+    start_date:  '',
+    due_date:    ''
   });
 
   const [newSubtask, setNewSubtask] = useState('');
