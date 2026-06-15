@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { useData, API_BASE, resolveUploadUrl, authFetch } from '../../context/DataContext';
+import { useData, API_BASE, SHARE_BASE, resolveUploadUrl, authFetch } from '../../context/DataContext';
 import { X, Plus, Trash2, MessageSquare, Send, MoreHorizontal, UploadCloud, Paperclip, ChevronDown, ChevronUp, UserPlus, FolderOpen, ExternalLink, History, Link2, Check } from 'lucide-react';
 import UserAvatar from '../ui/UserAvatar';
 import MentionTextarea, { nameToHandle, extractMentionHandles } from '../ui/MentionTextarea';
@@ -148,12 +148,9 @@ const TaskModal = ({ taskId, initialStatus, initialData, onClose, readOnly = fal
   const actualTaskId = existingTask ? existingTask.id : createdTempId;
 
   /* ── Task URL & copy link ── */
-  // Served by the backend (PHP) since the frontend site is static nginx and can't run PHP.
-  // API_BASE = ".../index.php/api" → strip trailing "/api" to reach the share route.
-  const getTaskUrl = () => {
-    const shareBase = API_BASE.replace(/\/api\/?$/, '');
-    return `${shareBase}/share/${taskProjectId}?task=${actualTaskId}`;
-  };
+  // Friendly public share link, e.g. https://s.slidust.xyz/share/<taskId>.
+  // Served by the backend (PHP) since the frontend site is static nginx.
+  const getTaskUrl = () => `${SHARE_BASE}/${actualTaskId}`;
 
   const handleCopyLink = () => {
     if (!actualTaskId) return;

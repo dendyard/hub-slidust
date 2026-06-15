@@ -6,6 +6,12 @@ export const useData = () => useContext(DataContext);
 
 export const API_BASE = import.meta.env.VITE_API_BASE;
 
+// Base for public share links, e.g. https://s.slidust.xyz/share — set via
+// VITE_SHARE_BASE in production. Falls back to the backend (API_BASE minus /api)
+// so local dev works without extra config.
+export const SHARE_BASE =
+  import.meta.env.VITE_SHARE_BASE || `${API_BASE.replace(/\/api\/?$/, '')}/share`;
+
 // Resolve a stored upload path to a full URL.
 // Handles both relative paths (new) and absolute URLs (legacy data in DB).
 export const resolveUploadUrl = (path) => {
