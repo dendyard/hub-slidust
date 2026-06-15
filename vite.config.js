@@ -3,6 +3,18 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  server: {
+    proxy: {
+      // Share page is PHP — Vite can't run it. Forward /share/* to MAMP (Apache+PHP).
+      // MAMP's .htaccess isn't applied (AllowOverride None), so route via PATH_INFO:
+      //   /share/p123?task=t1  ->  /slidust/public/share/index.php/p123?task=t1
+      '/share': {
+        target: 'http://localhost:8888',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/share/, '/slidust/public/share/index.php'),
+      },
+    },
+  },
   optimizeDeps: {
     include: ['react-is'],
   },

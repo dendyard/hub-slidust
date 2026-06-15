@@ -4,8 +4,9 @@
 
 **Slidust** is a project management web app. Frontend is React 19 + Vite, backend is CodeIgniter (PHP) + MySQL running on MAMP locally.
 
-- Frontend repo: `/Applications/MAMP/htdocs/slidust`
+- Frontend repo (web app): `/Volumes/Personal Data/Dendy Dev/Slidust`  ← **edit & run dev HERE**
 - Backend repo: `/Applications/MAMP/htdocs/apis.slidust.xyz`
+- ⚠️ `/Applications/MAMP/htdocs/slidust` is a STALE copy — do NOT edit or run dev from there
 - Frontend URL (dev): `http://localhost:5173`
 - Backend API base: defined in `.env` as `VITE_API_BASE` → `http://localhost:8888/apis.slidust.xyz/index.php/api`
 

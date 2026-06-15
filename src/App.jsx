@@ -45,7 +45,9 @@ function App() {
   const [showOrgsModal, setShowOrgsModal] = useState(false);
   const [initialStatusForNew, setInitialStatusForNew] = useState(null);
   const [noAccessPopup, setNoAccessPopup] = useState(false);
-  const [taskShowProjectContext, setTaskShowProjectContext] = useState(false);
+  const [taskShowProjectContext, setTaskShowProjectContext] = useState(
+    () => new URLSearchParams(window.location.search).get('shared') === '1'
+  );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
     () => localStorage.getItem('sidebar_collapsed') === 'true'
@@ -53,19 +55,63 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const getTaskIdFromUrl = () => new URLSearchParams(window.location.search).get('task');
+  const isSharedFromUrl = () => new URLSearchParams(window.location.search).get('shared') === '1';
 
   const [activeTaskId, setActiveTaskId] = useState(() => getTaskIdFromUrl());
-  const [taskReadOnly, setTaskReadOnly] = useState(false);
+  const [taskReadOnly, setTaskReadOnly] = useState(() => isSharedFromUrl());
   const [taskInitialData, setTaskInitialData] = useState(null);
   const prevUserRef = useRef(currentUser);
 
-  // Redirect to dashboard after fresh login (null → user transition)
+  // Save intended URL before login so we can restore it after auth
+  useEffect(() => {
+    if (!currentUser) {
+      const path = window.location.pathname;
+      const search = window.location.search;
+      const isShareRedirect = path.startsWith('/share/');
+      const isMeaningfulUrl = (path !== '/' && path !== '/myboard') || search;
+      if (isMeaningfulUrl && !isShareRedirect) {
+        sessionStorage.setItem('slidust_redirect', path + search);
+      }
+    }
+  }, [currentUser]);
+
+  // After fresh login (null → user): restore intended URL or go to myboard
   useEffect(() => {
     const wasNull = prevUserRef.current === null;
     prevUserRef.current = currentUser;
     if (wasNull && currentUser) {
-      setActivePage('myboard');
-      window.history.replaceState({}, '', '/myboard');
+      const saved = sessionStorage.getItem('slidust_redirect');
+      sessionStorage.removeItem('slidust_redirect');
+      if (saved && saved !== '/') {
+        window.history.replaceState({}, '', saved);
+        const seg = saved.split('/').filter(Boolean)[0] || '';
+        const savedQuery = new URLSearchParams(saved.split('?')[1] || '');
+        const taskParam = savedQuery.get('task');
+        if (taskParam) {
+          setActiveTaskId(taskParam);
+          // Came from a share link → open the task card like from the dashboard
+          if (savedQuery.get('shared') === '1') {
+            setTaskReadOnly(true);
+            setTaskShowProjectContext(true);
+          }
+        }
+        if (seg === 'board') {
+          const projId = saved.split('/').filter(Boolean)[1] || null;
+          if (projId) setActiveProjectId(projId);
+          setActivePage('board');
+        } else if (seg === 'myboard') {
+          setActivePage('myboard');
+        } else if (seg === 'flow') {
+          setActivePage('dustflow');
+        } else if (seg === 'slidnote') {
+          setActivePage('slidnote');
+        } else {
+          setActivePage('dashboard');
+        }
+      } else {
+        setActivePage('myboard');
+        window.history.replaceState({}, '', '/myboard');
+      }
     }
   }, [currentUser]);
 
@@ -80,8 +126,9 @@ function App() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Sync URL when activePage or active IDs change
+  // Sync URL when activePage or active IDs change (only when logged in)
   useEffect(() => {
+    if (!currentUser) return;
     if (activePage === 'dashboard') {
       window.history.pushState({}, '', '/');
     } else if (activePage === 'myboard') {
@@ -93,7 +140,7 @@ function App() {
     } else {
       window.history.pushState({}, '', activeProjectId ? `/board/${activeProjectId}` : '/board');
     }
-  }, [activePage, activeProjectId, activeFlowId, activeSlidNoteId]);
+  }, [currentUser, activePage, activeProjectId, activeFlowId, activeSlidNoteId]);
 
   // Sync task modal in URL as query param (overlays any page)
   useEffect(() => {
