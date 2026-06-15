@@ -148,9 +148,11 @@ const TaskModal = ({ taskId, initialStatus, initialData, onClose, readOnly = fal
   const actualTaskId = existingTask ? existingTask.id : createdTempId;
 
   /* ── Task URL & copy link ── */
+  // Served by the backend (PHP) since the frontend site is static nginx and can't run PHP.
+  // API_BASE = ".../index.php/api" → strip trailing "/api" to reach the share route.
   const getTaskUrl = () => {
-    const base = window.location.origin;
-    return `${base}/share/${taskProjectId}?task=${actualTaskId}`;
+    const shareBase = API_BASE.replace(/\/api\/?$/, '');
+    return `${shareBase}/share/${taskProjectId}?task=${actualTaskId}`;
   };
 
   const handleCopyLink = () => {
