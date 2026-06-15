@@ -27,7 +27,10 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             npm ci --legacy-peer-deps
-            echo "VITE_OPENAI_API_KEY=$VITE_OPENAI_API_KEY" > .env
+            # .env may be owned by another user (created at setup) — remove then
+            # recreate so the deploy user can always overwrite it.
+            rm -f .env
+            printf 'VITE_OPENAI_API_KEY=%s\n' "$VITE_OPENAI_API_KEY" > .env
             npm run build
             echo "✅ Deploy selesai: $(date)"
         env:
