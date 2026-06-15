@@ -22,7 +22,10 @@ jobs:
           script: |
             set -e
             cd /www/wwwroot/github/hub-slidust
-            git pull origin main
+            # Force-sync to remote — the server's .htaccess is sometimes rewritten
+            # by the panel, which would make a plain `git pull` abort.
+            git fetch origin main
+            git reset --hard origin/main
             npm ci --legacy-peer-deps
             echo "VITE_OPENAI_API_KEY=$VITE_OPENAI_API_KEY" > .env
             npm run build
