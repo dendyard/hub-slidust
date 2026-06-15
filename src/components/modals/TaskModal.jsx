@@ -150,7 +150,7 @@ const TaskModal = ({ taskId, initialStatus, initialData, onClose, readOnly = fal
   /* ── Task URL & copy link ── */
   const getTaskUrl = () => {
     const base = window.location.origin;
-    return `${base}/board/${taskProjectId}?task=${actualTaskId}`;
+    return `${base}/share/${taskProjectId}?task=${actualTaskId}`;
   };
 
   const handleCopyLink = () => {

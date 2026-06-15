@@ -8,7 +8,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useData, resolveUploadUrl } from '../../context/DataContext';
 import UserAvatar, { getAvatarColor, hasRealAvatar } from '../ui/UserAvatar';
-import { ArrowLeft, Save, Square, Diamond, Circle, Type, Trash2, Pencil, Database, StickyNote, ChevronRight, Hexagon, X, AlignLeft, AlignCenter, AlignRight, PersonStanding, Lock, Link2, Check, Globe2, Settings2, UserPlus, Search, Image as ImageIcon, ArrowBigRight, ArrowBigLeft, ArrowBigUp, ArrowBigDown } from 'lucide-react';
+import { ArrowLeft, Save, Square, Diamond, Circle, Type, Trash2, Pencil, Database, StickyNote, ChevronRight, Hexagon, X, AlignLeft, AlignCenter, AlignRight, PersonStanding, Lock, Link2, Check, Globe2, Settings2, UserPlus, Search, Image as ImageIcon, ArrowBigRight, ArrowBigLeft, ArrowBigUp, ArrowBigDown, Scan } from 'lucide-react';
 import styles from './FlowEditor.module.css';
 
 /* ── Constants ── */
@@ -608,6 +608,7 @@ const nodeTypes = { shape: ShapeNode, text: TextNode, image: ImageNode };
 const NODE_TOOLS = [
   { type: 'text',  shape: null,       label: 'Text',     icon: Type,          w: 120, h: 36  },
   { type: 'shape', shape: 'sticky',   label: 'Note',     icon: StickyNote,    w: 150, h: 130, defaultColor: '#FFEF91' },
+  { type: 'shape', shape: 'zone',     label: '',         icon: Scan,          w: 140, h: 60,  defaultColor: 'transparent', defaultBorderColor: '#ef4444', defaultBorderWidth: 3, defaultFontColor: '#ef4444' },
   { type: 'shape', shape: 'rect',     label: 'Process',  icon: Square,        w: 140, h: 60  },
   { type: 'shape', shape: 'step',     label: 'Step',     icon: ChevronRight,  w: 140, h: 60  },
   { type: 'shape', shape: 'io',       label: 'I/O',      icon: Hexagon,       w: 140, h: 60  },
@@ -954,15 +955,32 @@ const EditorInner = ({ flowId, flowName: initialName, initialVisibility = 'publi
       e.preventDefault();
       imageFiles.forEach((file, i) => insertImageRef.current(file, e.clientX + i * 24, e.clientY + i * 24));
     };
+    const onPaste = (e) => {
+      if (!canEdit) return;
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      const items = Array.from(e.clipboardData?.items || []);
+      const imageItems = items.filter(item => item.type.startsWith('image/'));
+      if (!imageItems.length) return;
+      e.preventDefault();
+      const bounds = el.getBoundingClientRect();
+      const cx = bounds.left + bounds.width / 2;
+      const cy = bounds.top + bounds.height / 2;
+      imageItems.forEach((item, i) => {
+        const file = item.getAsFile();
+        if (file) insertImageRef.current(file, cx + i * 24, cy + i * 24);
+      });
+    };
     el.addEventListener('dragover', onDragOver);
     el.addEventListener('dragleave', onDragLeave);
     el.addEventListener('drop', onDrop);
+    window.addEventListener('paste', onPaste);
     return () => {
       el.removeEventListener('dragover', onDragOver);
       el.removeEventListener('dragleave', onDragLeave);
       el.removeEventListener('drop', onDrop);
+      window.removeEventListener('paste', onPaste);
     };
-  }, []);
+  }, [canEdit]);
 
   const onImageFileInput = useCallback((e) => {
     if (!canEdit) return;
@@ -985,10 +1003,10 @@ const EditorInner = ({ flowId, flowName: initialName, initialVisibility = 'publi
       data: {
         label: tool.label,
         shape: tool.shape,
-        color:       tool.type === 'text' ? 'var(--text-main)' : (tool.defaultColor || '#ffffff'),
-        fontColor:   tool.type === 'text' ? undefined : (tool.defaultFontColor || (tool.defaultColor ? undefined : '#000000')),
-        borderWidth: tool.type === 'text' || tool.defaultColor ? 0 : 1,
-        borderColor: '#000000',
+        color:       tool.type === 'text' ? 'var(--text-main)' : (tool.defaultColor ?? '#ffffff'),
+        fontColor:   tool.type === 'text' ? undefined : (tool.defaultFontColor || (tool.defaultColor != null ? undefined : '#000000')),
+        borderWidth: tool.type === 'text' ? 0 : (tool.defaultBorderWidth ?? (tool.defaultColor != null ? 0 : 1)),
+        borderColor: tool.defaultBorderColor || '#000000',
         borderStyle: 'solid',
         ...(tool.shape === 'sticky' && {
           ownerName:   currentUser?.name   || '',

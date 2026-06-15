@@ -2,6 +2,9 @@
   RewriteEngine On
   RewriteBase /
 
+  # Route /share/* to PHP share page (for OG meta tags) — must come before SPA fallback
+  RewriteRule ^share/(.*)$ share/index.php [L,QSA]
+
   # Skip real files and directories
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
