@@ -37,8 +37,10 @@ src/
     DataContext.jsx           # Global state: user, projects, tasks, members, notifications
   pages/
     Login.jsx
-    SlidNotePreview.jsx       # Public share page (no auth, standalone)
+    SlidNotePreview.jsx       # Public SlidNote share page (no auth, standalone)
     SlidNotePreview.module.css
+    FlowPreview.jsx           # Public Dust Flow share page (no auth, standalone, read-only ReactFlow)
+    FlowPreview.module.css
   components/
     layout/
       Header.jsx              # Top bar: search, notifications, user menu
@@ -83,12 +85,15 @@ Routing is done manually with `window.history.pushState` and `window.addEventLis
 | `/board/<project-id>`        | Board (specific project)     |
 | `/flow`                      | Flow list                    |
 | `/flow/<flow-id>`            | Flow editor (full-screen overlay) |
+| `/flow/preview/<id>`         | Public Flow preview (no auth, standalone, read-only) |
 | `/slidnote`                  | SlidNote list                |
 | `/slidnote/<note-id>`        | SlidNote editor              |
-| `/slidnote/preview/<id>`     | Public preview (no auth, standalone) |
+| `/slidnote/preview/<id>`     | Public SlidNote preview (no auth, standalone) |
 | `?task=<task-id>`            | Task modal overlay (any page) |
 
-**Key routing logic** is in `src/App.jsx` (path parsers: `getPageFromUrl`, `getFlowIdFromUrl`, `getSlidNoteIdFromUrl`, `getProjectIdFromUrl`) and `src/main.jsx` (detects `/slidnote/preview/<id>` before mounting DataProvider).
+**Key routing logic** is in `src/App.jsx` (path parsers: `getPageFromUrl`, `getFlowIdFromUrl`, `getSlidNoteIdFromUrl`, `getProjectIdFromUrl`) and `src/main.jsx` (detects `/slidnote/preview/<id>` and `/flow/preview/<id>` before mounting DataProvider — these render standalone without `DataProvider`).
+
+The Flow preview reuses the editor's exact node renderers via `export const nodeTypes` in `FlowEditor.jsx`, rendered in a read-only `<ReactFlow>` (no editing/selection/dragging).
 
 **Apache SPA fallback**: `public/.htaccess` rewrites all non-file paths to `index.html`.
 
@@ -112,8 +117,12 @@ apis.slidust.xyz/application/
       Project_members.php
       Notes.php               # Board notes (per project)
       Slid_note.php           # SlidNote CRUD (auth required)
-      Slid_note_public.php    # SlidNote public read (no auth, extends MY_Controller)
+      Slid_note_public.php    # SlidNote public read JSON (no auth, extends MY_Controller)
+      Slid_note_share.php     # SlidNote share HTML page w/ dynamic OG meta (no auth) → /note/{id}
+      Share.php               # Task share HTML page w/ dynamic OG meta (no auth) → /share/{taskId}
+      Task_Share.php          # Task public read JSON (no auth) → /api/tasks/share/{taskId}
       Flows.php
+      Flows_public.php        # Flow public read JSON (no auth) → /api/flows/public?id={id}, public visibility only
       Dust_write.php
       Workflows.php
       Organizations.php
@@ -140,6 +149,40 @@ apis.slidust.xyz/application/
 ### Notification types
 - `'mention'` — user was @mentioned in a comment
 - `'reply'` — user's comment was replied to
+
+### Share pages & dynamic OG meta (server-rendered)
+
+Social crawlers (WhatsApp / X / Facebook / Slack) **do not execute JS**, so the
+static React SPA's client-side OG tags are invisible to them. Shareable content
+is therefore served from dedicated **backend PHP pages** that render OG meta tags
+per-content server-side, then redirect real browsers into the app.
+
+| Share URL (backend)        | Controller            | OG content (follows the actual content) | Redirects to |
+|----------------------------|-----------------------|------------------------------------------|--------------|
+| `/share/{taskId}`          | `Share.php`           | title, description, `og:image` = first image attachment (`file_type LIKE 'image/%'`) | `{app}/?task={id}&shared=1` |
+| `/note/{noteId}`           | `Slid_note_share.php` | title, description (first paragraph), `og:image` = first `image` block or first `slider` image | `{app}/slidnote/preview/{id}` |
+
+- Both routes registered in `application/config/routes.php` (`share/(:any)`, `note/(:any)`).
+- `og:image` uses an absolute URL: `base_url + 'uploads/...'` (same resolution as the frontend `resolveMediaUrl`). When an image is present they emit `twitter:card = summary_large_image`, otherwise `summary`.
+- `/note/{id}` only serves notes with `visibility = 'public'`.
+- Test previews with the [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) against the **production** URL (local MAMP lacks the uploaded files).
+
+> **Current UI behavior:** the copy-link buttons emit **clean frontend URLs**, not the
+> backend share pages — `getTaskUrl()` in `TaskModal.jsx` → `{origin}/board/{projectId}?task={taskId}`,
+> `copyShareLink()` in `SlidNote.jsx` → `{origin}/slidnote/preview/{id}`,
+> `handleCopyLink()` in `FlowEditor.jsx` → `{origin}/flow/preview/{id}`. The backend OG share
+> pages above still exist and work, but are not currently wired to the copy buttons (kept for
+> when rich link previews are re-enabled).
+
+### Public sharing (no-auth JSON read endpoints)
+
+Standalone preview pages fetch read-only JSON from public, no-auth controllers
+(`MY_Controller`, not `API_Controller`) that only return content with `visibility = 'public'`:
+
+| Preview page (frontend)      | Fetches                          | Controller            |
+|------------------------------|----------------------------------|-----------------------|
+| `/slidnote/preview/{id}`     | `/api/slid_note/public?id={id}`  | `Slid_note_public.php` |
+| `/flow/preview/{id}`         | `/api/flows/public?id={id}`      | `Flows_public.php` (strips `editor_ids`, adds `owner_name`/`owner_avatar`) |
 
 ---
 

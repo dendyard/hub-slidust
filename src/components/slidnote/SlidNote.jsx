@@ -967,6 +967,7 @@ const SlidNote = ({ activeNoteId, onOpenNote, onCloseNote }) => {
 
   const copyShareLink = async () => {
     if (!activeDocument) return;
+    // Clean frontend URL, e.g. https://slidust.xyz/slidnote/preview/{id}.
     const url = new URL(window.location.href);
     url.search = '';
     url.pathname = `/slidnote/preview/${activeDocument.id}`;

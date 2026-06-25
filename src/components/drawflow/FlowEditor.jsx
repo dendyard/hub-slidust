@@ -602,7 +602,9 @@ const ZoomLabel = () => {
 };
 
 /* nodeTypes must be stable (defined outside component) */
-const nodeTypes = { shape: ShapeNode, text: TextNode, image: ImageNode };
+/* Exported so the read-only public preview (FlowPreview.jsx) reuses the exact
+   same node renderers — keeps the shared view pixel-identical to the editor. */
+export const nodeTypes = { shape: ShapeNode, text: TextNode, image: ImageNode };
 
 /* ── NODE TOOLS CONFIG ── */
 const NODE_TOOLS = [
@@ -1264,10 +1266,13 @@ const EditorInner = ({ flowId, flowName: initialName, initialVisibility = 'publi
   }, [canEdit, flowId, flowVisibility, onVisibilityChange]);
 
   const handleCopyLink = useCallback(async () => {
+    // Public, no-login share link (read-only preview). Works only while the flow
+    // is Public; private flows resolve to a "not found" state on the preview page.
     const url = new URL(window.location.href);
     url.search = '';
-    url.pathname = `/flow/${flowId}`;
-    await navigator.clipboard.writeText(url.toString());
+    url.pathname = `/flow/preview/${flowId}`;
+    try { await navigator.clipboard.writeText(url.toString()); }
+    catch { window.prompt('Copy public link', url.toString()); }
     setCopiedLink(true);
     window.setTimeout(() => setCopiedLink(false), 1600);
   }, [flowId]);
