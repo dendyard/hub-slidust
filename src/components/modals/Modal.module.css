@@ -1095,11 +1095,7 @@ input:disabled + .slider {
   min-height: 40px;
   border-radius: var(--border-radius-sm);
   cursor: text;
-  transition: background 0.15s;
   position: relative;
-}
-.descPreview:hover {
-  background: var(--bg-surface-hover);
 }
 .descContent {
   padding: 6px 2px;

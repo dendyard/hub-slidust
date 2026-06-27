@@ -45,6 +45,7 @@ src/
     layout/
       Header.jsx              # Top bar: search, notifications, user menu
       Sidebar.jsx             # Nav sidebar (collapsible)
+      ToastNotifications.jsx  # Stacked popup toasts (top-right) for unread notifications; per-toast dismiss persisted in localStorage ('pm_dismissed_toasts')
     board/
       Board.jsx               # Project board (kanban, list, calendar, roadmap, stats)
       Column.jsx, TaskCard.jsx

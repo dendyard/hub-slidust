@@ -1196,7 +1196,7 @@ const TaskModal = ({ taskId, initialStatus, initialData, onClose, readOnly = fal
              >
                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                  <MessageSquare size={16} style={{display: 'inline', verticalAlign: 'text-bottom'}} />
-                 Activity & Comments
+                 Activity
                  {comments.length > 0 && (
                    <span className={styles.commentCount}>{comments.length}</span>
                  )}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
+import ToastNotifications from './components/layout/ToastNotifications';
 import Board from './components/board/Board';
 import Dashboard from './components/dashboard/Dashboard';
 import FlowList from './components/drawflow/FlowList';
@@ -265,6 +266,7 @@ function App() {
           onFlowClick={(id) => { setActivePage('dustflow'); setActiveFlowId(id); }}
           onSlidNoteClick={(id) => { setActivePage('slidnote'); setActiveSlidNoteId(id); }}
         />
+        <ToastNotifications onTaskClick={handleExternalTaskClick} />
         <main style={{
           marginLeft: isMobile ? 0 : collapsedWidth,
           marginTop: 'var(--header-height)',
