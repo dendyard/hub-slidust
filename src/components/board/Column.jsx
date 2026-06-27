@@ -39,7 +39,6 @@ const Column = ({ stageId, status, stageColor, tasks, onDropTask, onTaskClick, m
     >
       <div className={styles.header}>
         <div className={styles.titleWrapper}>
-          <div className={styles.statusDot} style={stageColor ? { backgroundColor: stageColor } : {}} />
           <h3>{status}</h3>
           <span className={styles.taskCount}>{tasks.length}</span>
         </div>
